@@ -11,7 +11,7 @@ public class Main {
         for (int i = 0; i < n; i++) {
             System.out.print("Ingrese la nota " + (i + 1) + ": ");
             int nota = sc.nextInt();
-            lista.insertar(nota);
+            lista.insertarAlFinal(nota);
         }
 
         System.out.println("\nContenido de la lista:");
