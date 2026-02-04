@@ -30,11 +30,11 @@ public class Vista {
             return;
         }
 
-        Nodo actual = lista.getCabeza();
+        Nodo actual = lista.obtenerCabeza();
         int i = 0;
         while (actual != null) {
-            System.out.println("Posicion " + i + ": " + actual.getValor());
-            actual = actual.getSiguiente();
+            System.out.println("Posicion " + i + ": " + actual.obtenerValor());
+            actual = actual.obtenerSiguiente();
             i++;
         }
     }
@@ -45,14 +45,6 @@ public class Vista {
      */
     public void mostrarMensaje(String mensaje) {
         System.out.println(mensaje);
-    }
-
-    /**
-     * Muestra un mensaje sin salto de linea.
-     * @param mensaje El mensaje a mostrar
-     */
-    public void mostrarSinSalto(String mensaje) {
-        System.out.print(mensaje);
     }
 
     /**
@@ -69,18 +61,10 @@ public class Vista {
      */
     public void mostrarNodoEncontrado(Nodo nodo) {
         if (nodo != null) {
-            System.out.println("Valor encontrado: " + nodo.getValor());
+            System.out.println("Valor encontrado: " + nodo.obtenerValor());
         } else {
             System.out.println("Nodo no encontrado.");
         }
-    }
-
-    /**
-     * Muestra el tamano de una lista.
-     * @param tamano El tamano de la lista
-     */
-    public void mostrarTamano(int tamano) {
-        System.out.println("Tamano de la lista: " + tamano);
     }
 
     /**

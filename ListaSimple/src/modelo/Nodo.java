@@ -31,23 +31,15 @@ public class Nodo {
      * Obtiene el valor almacenado en el nodo.
      * @return El valor del nodo
      */
-    public int getValor() {
+    public int obtenerValor() {
         return valor;
-    }
-
-    /**
-     * Establece el valor del nodo.
-     * @param valor El nuevo valor a almacenar
-     */
-    public void setValor(int valor) {
-        this.valor = valor;
     }
 
     /**
      * Obtiene la referencia al siguiente nodo.
      * @return El siguiente nodo en la lista
      */
-    public Nodo getSiguiente() {
+    public Nodo obtenerSiguiente() {
         return siguiente;
     }
 
@@ -55,7 +47,7 @@ public class Nodo {
      * Establece la referencia al siguiente nodo.
      * @param siguiente El nodo que seguira a este en la lista
      */
-    public void setSiguiente(Nodo siguiente) {
+    public void asignarSiguiente(Nodo siguiente) {
         this.siguiente = siguiente;
     }
 }

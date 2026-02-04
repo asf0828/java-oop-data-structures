@@ -26,7 +26,7 @@ public class Lista {
         if (cabeza == null) {
             cabeza = nuevo;
         } else {
-            nuevo.setSiguiente(cabeza);
+            nuevo.asignarSiguiente(cabeza);
             cabeza = nuevo;
         }
         tamano++;
@@ -42,7 +42,7 @@ public class Lista {
             cabeza = nuevo;
         } else {
             Nodo ultimo = obtenerUltimoNodo();
-            ultimo.setSiguiente(nuevo);
+            ultimo.asignarSiguiente(nuevo);
         }
         tamano++;
     }
@@ -56,8 +56,8 @@ public class Lista {
             return null;
         }
         Nodo actual = cabeza;
-        while (actual.getSiguiente() != null) {
-            actual = actual.getSiguiente();
+        while (actual.obtenerSiguiente() != null) {
+            actual = actual.obtenerSiguiente();
         }
         return actual;
     }
@@ -70,10 +70,10 @@ public class Lista {
     public Nodo buscarPorContenido(int valor) {
         Nodo actual = cabeza;
         while (actual != null) {
-            if (actual.getValor() == valor) {
+            if (actual.obtenerValor() == valor) {
                 return actual;
             }
-            actual = actual.getSiguiente();
+            actual = actual.obtenerSiguiente();
         }
         return null;
     }
@@ -89,7 +89,7 @@ public class Lista {
         }
         Nodo actual = cabeza;
         for (int i = 0; i < posicion; i++) {
-            actual = actual.getSiguiente();
+            actual = actual.obtenerSiguiente();
         }
         return actual;
     }
@@ -98,7 +98,7 @@ public class Lista {
      * Retorna el tamano de la lista.
      * @return El numero de nodos en la lista
      */
-    public int getTamano() {
+    public int obtenerTamano() {
         return tamano;
     }
 
@@ -114,7 +114,7 @@ public class Lista {
      * Obtiene la referencia al primer nodo (cabeza) de la lista.
      * @return El nodo cabeza de la lista
      */
-    public Nodo getCabeza() {
+    public Nodo obtenerCabeza() {
         return cabeza;
     }
 }

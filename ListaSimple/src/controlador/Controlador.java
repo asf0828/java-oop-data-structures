@@ -30,13 +30,13 @@ public class Controlador {
         }
 
         int suma = 0;
-        Nodo actual = lista.getCabeza();
+        Nodo actual = lista.obtenerCabeza();
         while (actual != null) {
-            suma += actual.getValor();
-            actual = actual.getSiguiente();
+            suma += actual.obtenerValor();
+            actual = actual.obtenerSiguiente();
         }
 
-        return (double) suma / lista.getTamano();
+        return (double) suma / lista.obtenerTamano();
     }
 
     /**
