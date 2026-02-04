@@ -22,9 +22,9 @@ public class Main {
         Nodo encontrado = lista.buscarPorPosicion(pos);
 
         if (encontrado != null) {
-            System.out.println("Valor encontrado: " + encontrado.valor);
+            System.out.println("Valor encontrado: " + encontrado.getValor());
         } else {
-            System.out.println("Posición no válida.");
+            System.out.println("Posicion no valida.");
         }
 
         double promedio = lista.calcularPromedio();

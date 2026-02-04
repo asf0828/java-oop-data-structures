@@ -1,10 +1,10 @@
 public class Lista {
     private Nodo cabeza;
-    private int tamaño;
+    private int tamano;
 
     public Lista() {
         cabeza = null;
-        tamaño = 0;
+        tamano = 0;
     }
 
     public void insertar(int valor) {
@@ -13,48 +13,48 @@ public class Lista {
             cabeza = nuevo;
         } else {
             Nodo actual = cabeza;
-            while (actual.siguiente != null) {
-                actual = actual.siguiente;
+            while (actual.getSiguiente() != null) {
+                actual = actual.getSiguiente();
             }
-            actual.siguiente = nuevo;
+            actual.setSiguiente(nuevo);
         }
-        tamaño++;
+        tamano++;
     }
 
     public Nodo buscarPorPosicion(int posicion) {
-        if (posicion < 0 || posicion >= tamaño) {
+        if (posicion < 0 || posicion >= tamano) {
             return null;
         }
         Nodo actual = cabeza;
         for (int i = 0; i < posicion; i++) {
-            actual = actual.siguiente;
+            actual = actual.getSiguiente();
         }
         return actual;
     }
 
-    public int getTamaño() {
-        return tamaño;
+    public int getTamano() {
+        return tamano;
     }
 
     public void mostrarContenido() {
         Nodo actual = cabeza;
         int i = 0;
         while (actual != null) {
-            System.out.println("Posición " + i + ": " + actual.valor);
-            actual = actual.siguiente;
+            System.out.println("Posicion " + i + ": " + actual.getValor());
+            actual = actual.getSiguiente();
             i++;
         }
     }
 
     public double calcularPromedio() {
-        if (tamaño == 0) return 0;
+        if (tamano == 0) return 0;
         int suma = 0;
         Nodo actual = cabeza;
         while (actual != null) {
-            suma += actual.valor;
-            actual = actual.siguiente;
+            suma += actual.getValor();
+            actual = actual.getSiguiente();
         }
-        return (double) suma / tamaño;
+        return (double) suma / tamano;
     }
 }
 
