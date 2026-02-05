@@ -46,17 +46,32 @@ public class Controlador {
     public void ejecutar() {
         Lista lista = new Lista();
 
-        int n = vista.leerEntero("Ingrese la cantidad de notas: ");
+        // Validar cantidad de notas
+        int n;
+        do {
+            n = vista.leerEntero("Ingrese la cantidad de notas: ");
+            if (n <= 0) {
+                vista.mostrarMensaje("Error: Debe ingresar al menos una nota");
+            }
+        } while (n <= 0);
 
+        // Leer notas con validacion de rango
         for (int i = 0; i < n; i++) {
-            int nota = vista.leerEntero("Ingrese la nota " + (i + 1) + ": ");
+            int nota;
+            do {
+                nota = vista.leerEntero("Ingrese la nota " + (i + 1) + " (0-100): ");
+                if (nota < 0 || nota > 100) {
+                    vista.mostrarMensaje("Error: La nota debe estar entre 0 y 100");
+                }
+            } while (nota < 0 || nota > 100);
             lista.insertarAlFinal(nota);
         }
 
         vista.mostrarMensaje("\nContenido de la lista:");
         vista.mostrarContenido(lista);
 
-        int pos = vista.leerEntero("\nIngrese la posicion a buscar: ");
+        int pos = vista.leerEntero("\nIngrese la posicion a buscar (0-" + 
+                                   (lista.obtenerTamano() - 1) + "): ");
         Nodo encontrado = lista.buscarPorPosicion(pos);
 
         vista.mostrarNodoEncontrado(encontrado);
@@ -67,3 +82,4 @@ public class Controlador {
         vista.cerrar();
     }
 }
+
