@@ -12,6 +12,10 @@ public class Main {
     /**
      * Metodo principal que inicia la aplicacion.
      * @param args Argumentos de linea de comandos (no utilizados)
+     * Integrantes del equipo:
+     *  - Maria Elena Molina Torres. Código 200631
+     *  - Alexander José Sandoval Figueredo. Código 200582
+     *  - Yarik Valeria Serrano Recamán. Código 200583
      */
     public static void main(String[] args) {
         // Instanciar la vista
