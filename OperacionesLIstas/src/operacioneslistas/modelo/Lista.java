@@ -98,4 +98,35 @@ public class Lista {
     public boolean estaVacia() {
         return cabeza == null;
     }
+
+    /**
+     * EJERCICIO 1: Cuenta cuantas letras 'a' (minusculas) hay en la lista.
+     * Recorre todos los nodos y cuenta cada 'a' en los valores almacenados.
+     */
+    public int contarLetrasA() {
+        int contador = 0;
+        Nodo actual = cabeza;
+        
+        while (actual != null) {
+            String valor = actual.obtenerValor();
+            // Recorrer cada caracter del String
+            for (int i = 0; i < valor.length(); i++) {
+                if (valor.charAt(i) == 'a') {
+                    contador++;
+                }
+            }
+            actual = actual.obtenerSiguiente();
+        }
+        
+        return contador;
+    }
+    
+    /**
+     * Metodo auxiliar para insertar un caracter individual.
+     * Convierte el char a String y lo inserta al final de la lista.
+     * @param c El caracter a insertar
+     */
+    public void insertarCaracter(char c) {
+        insertarAlFinal(String.valueOf(c));
+    }
 }
