@@ -5,6 +5,7 @@ A learning repository for Object-Oriented Programming concepts and Data Structur
 ## Projects
 
 - [ListaSimple](./ListaSimple/) - Singly Linked List implementation
+- [OperacionesLIstas](./OperacionesLIstas/) - List operations: count characters, compare lists, and remove duplicates
 
 ## Requirements
 
