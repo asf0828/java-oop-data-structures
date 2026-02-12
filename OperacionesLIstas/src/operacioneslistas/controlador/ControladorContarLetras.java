@@ -3,7 +3,7 @@ package operacioneslistas.controlador;
 import operacioneslistas.vista.Vista;
 
 /**
- * Clase ControladorContarLetras gestiona la logica del ejercicio 1.
+ * Clase ControladorContarLetras gestiona la logica para contar letras.
  * Lee una frase caracter a caracter, la almacena en una lista
  * y cuenta cuantas veces aparece la letra 'a'.
  */
@@ -20,7 +20,9 @@ public class ControladorContarLetras {
     }
 
     /**
-     * Ejecuta el ejercicio 1.
+     * Ejecuta la logica para contar letras.
+     * Lee una frase ingresada por el usuario, la almacena caracter a caracter
+     * en una lista y muestra cuantas veces aparece la letra 'a'.
      * Pendiente de implementacion.
      */
     public void ejecutar() {

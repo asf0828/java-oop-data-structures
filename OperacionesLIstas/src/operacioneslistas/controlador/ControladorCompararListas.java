@@ -22,7 +22,6 @@ public class ControladorCompararListas {
     }
 
     /**
-     * Ejecuta el ejercicio 2.
      * Lee los elementos de dos listas hasta que el usuario escriba 'end',
      * muestra ambas listas y determina si son identicas usando compareList.
      */

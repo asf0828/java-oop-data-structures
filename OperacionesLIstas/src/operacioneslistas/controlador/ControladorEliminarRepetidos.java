@@ -22,7 +22,6 @@ public class ControladorEliminarRepetidos {
     }
 
     /**
-     * Ejecuta el ejercicio 3.
      * Lee los elementos de una lista hasta que el usuario escriba 'end',
      * muestra la lista original y luego la lista sin elementos repetidos.
      */
