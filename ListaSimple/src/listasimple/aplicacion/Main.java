@@ -1,7 +1,7 @@
-package aplicacion;
+package listasimple.aplicacion;
 
-import controlador.Controlador;
-import vista.Vista;
+import listasimple.controlador.Controlador;
+import listasimple.vista.Vista;
 
 /**
  * Clase Main - Punto de entrada de la aplicacion.

@@ -1,8 +1,8 @@
-package controlador;
+package listasimple.controlador;
 
-import modelo.Lista;
-import modelo.Nodo;
-import vista.Vista;
+import listasimple.modelo.Lista;
+import listasimple.modelo.Nodo;
+import listasimple.vista.Vista;
 
 /**
  * Clase Controlador coordina el modelo y la vista.

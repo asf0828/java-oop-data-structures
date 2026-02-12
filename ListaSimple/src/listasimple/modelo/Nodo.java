@@ -1,4 +1,4 @@
-package modelo;
+package listasimple.modelo;
 
 /**
  * Clase Nodo representa un elemento de la lista enlazada simple.

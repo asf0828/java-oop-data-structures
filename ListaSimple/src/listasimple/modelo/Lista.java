@@ -1,4 +1,4 @@
-package modelo;
+package listasimple.modelo;
 
 /**
  * Clase Lista representa una lista enlazada simple.

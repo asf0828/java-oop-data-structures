@@ -1,7 +1,7 @@
-package vista;
+package listasimple.vista;
 
-import modelo.Lista;
-import modelo.Nodo;
+import listasimple.modelo.Lista;
+import listasimple.modelo.Nodo;
 import java.util.Scanner;
 
 /**
