@@ -85,6 +85,13 @@ public class Vista {
     }
 
     /**
+     * Muestra una linea divisoria decorativa.
+     */
+    public void mostrarLinea() {
+        System.out.println("----------------------------------------");
+    }
+
+    /**
      * Cierra el scanner.
      */
     public void cerrar() {
