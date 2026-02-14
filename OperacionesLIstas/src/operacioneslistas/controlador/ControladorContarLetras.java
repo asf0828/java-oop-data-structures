@@ -1,60 +1,53 @@
 package operacioneslistas.controlador;
 
 import operacioneslistas.modelo.Lista;
+import operacioneslistas.modelo.Nodo;
 import operacioneslistas.vista.Vista;
 
 /**
- * Controlador para el Ejercicio 1: Contar letras 'a' en una frase
- * Lee una frase, la almacena caracter a caracter en una lista
- * y cuenta cuantas letras 'a' contiene.
+ * Clase ControladorContarLetras gestiona la logica para contar letras.
+ * Lee una frase caracter a caracter, la almacena en una lista
+ * y cuenta cuantas veces aparece la letra 'a'.
  */
 public class ControladorContarLetras {
+
     private Vista vista;
-    private Lista lista;
-    
+
     /**
-     * Constructor del controlador
-     * @param vista Instancia de la vista para interactuar con el usuario
+     * Constructor del controlador.
+     * @param vista La vista a utilizar para interactuar con el usuario
      */
     public ControladorContarLetras(Vista vista) {
         this.vista = vista;
-        this.lista = new Lista();
     }
-    
+
     /**
-     * Ejecuta el flujo del ejercicio 1
+     * Ejecuta la logica para contar letras.
+     * Lee una frase ingresada por el usuario, la almacena caracter a caracter
+     * en una lista y muestra cuantas veces aparece la letra 'a'.
      */
     public void ejecutar() {
-        vista.mostrarMensaje("\n========== EJERCICIO 1: CONTAR LETRAS 'a' ==========");
-        vista.mostrarLinea();
-        
+        Lista lista = new Lista();
+
         // Leer la frase del usuario
         String frase = vista.leerTexto("Ingrese una frase: ");
-        
+
         // Cargar la frase caracter a caracter en la lista
-        cargarFraseEnLista(frase);
-        
-        // Contar las letras 'a' en la lista
-        int cantidadA = lista.contarLetrasA();
-        
-        // Mostrar el resultado
-        vista.mostrarLinea();
-        vista.mostrarMensaje("RESULTADO:");
-        vista.mostrarMensaje("Frase ingresada: " + frase);
-        vista.mostrarMensaje("Cantidad de letras 'a' (minusculas): " + cantidadA);
-        vista.mostrarLinea();
-    }
-    
-    /**
-     * Carga cada caracter de la frase en la lista
-     * Cada caracter se almacena como un nodo individual
-     * @param frase La frase a cargar en la lista
-     */
-    private void cargarFraseEnLista(String frase) {
-        lista = new Lista();
         for (int i = 0; i < frase.length(); i++) {
-            char caracter = frase.charAt(i);
-            lista.insertarCaracter(caracter);
+            lista.insertarAlFinal(String.valueOf(frase.charAt(i)));
         }
+
+        // Contar las letras 'a' recorriendo la lista nodo a nodo
+        int contador = 0;
+        Nodo actual = lista.obtenerCabeza();
+        while (actual != null) {
+            if (actual.obtenerValor().equalsIgnoreCase("a")) {
+                contador++;
+            }
+            actual = actual.obtenerSiguiente();
+        }
+
+        // Mostrar el resultado
+        vista.mostrarMensaje("La frase tiene " + contador + " letra(s) 'a'.");
     }
 }
