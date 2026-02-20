@@ -6,6 +6,7 @@ A learning repository for Object-Oriented Programming concepts and Data Structur
 
 - [ListaSimple](./ListaSimple/) - Singly Linked List implementation
 - [OperacionesLIstas](./OperacionesLIstas/) - List operations: count characters, compare lists, and remove duplicates
+- [OperacionesPilas](./OperacionesPilas/) - Stack operations: palindrome check, stack comparison, and balanced parentheses verification
 
 ## Requirements
 
