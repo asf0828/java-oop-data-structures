@@ -74,12 +74,14 @@ public class Pila {
      * @param otra La otra pila a comparar
      * @return true si son iguales, false en caso contrario
      */
-    public boolean compararPila(Pila otra) {
+    public boolean comparteStack(Pila otra) {
         if (this.tamano != otra.tamano) {
             return false;
         }
+
         Nodo actual = this.cima;
         Nodo actualOtra = otra.cima;
+
         while (actual != null) {
             if (actual.obtenerValor() != actualOtra.obtenerValor()) {
                 return false;
@@ -87,6 +89,7 @@ public class Pila {
             actual = actual.obtenerSiguiente();
             actualOtra = actualOtra.obtenerSiguiente();
         }
+
         return true;
     }
 }

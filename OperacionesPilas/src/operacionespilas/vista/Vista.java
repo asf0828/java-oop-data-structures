@@ -35,10 +35,12 @@ public class Vista {
         System.out.println("  0. Salir");
         System.out.println("==============================");
         System.out.print("Ingrese su opcion: ");
+
         while (!scanner.hasNextInt()) {
             System.out.print("Error: ingrese un numero valido: ");
             scanner.next();
         }
+
         int opcion = scanner.nextInt();
         scanner.nextLine();
         return opcion;
@@ -61,19 +63,23 @@ public class Vista {
      */
     public void mostrarPila(String nombre, Pila pila) {
         System.out.print(nombre + " ");
+
         if (pila.estaVacia()) {
             System.out.println("(pila vacia)");
-        } else {
-            Nodo actual = pila.obtenerCima();
-            while (actual != null) {
-                System.out.print(actual.obtenerValor());
-                if (actual.obtenerSiguiente() != null) {
-                    System.out.print(", ");
-                }
-                actual = actual.obtenerSiguiente();
-            }
-            System.out.println();
+            return;
         }
+
+        Nodo actual = pila.obtenerCima();
+
+        while (actual != null) {
+            System.out.print(actual.obtenerValor());
+            if (actual.obtenerSiguiente() != null) {
+                System.out.print(", ");
+            }
+            actual = actual.obtenerSiguiente();
+        }
+
+        System.out.println();
     }
 
     /**
