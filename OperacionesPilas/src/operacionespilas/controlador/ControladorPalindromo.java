@@ -23,11 +23,7 @@ public class ControladorPalindromo {
      * y determina si es palindroma usando una pila.
      */
     public void ejecutar() {
-        vista.mostrarLinea();
-        vista.mostrarMensaje("  EJERCICIO 1: PALINDROMO");
-        vista.mostrarLinea();
-
-        String frase = vista.leerTexto("Ingrese la frase: ");
+        String frase = vista.leerTexto("Ingrese la frase para verificar si es palíndromo: ");
 
         // Limpiar la frase: quitar espacios y convertir a minusculas
         String fraseNormalizada = frase.replaceAll("\\s+", "").toLowerCase();

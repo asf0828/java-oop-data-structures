@@ -4,8 +4,8 @@ A stack operations application in Java that demonstrates MVC architecture and a 
 
 ## Exercises
 
-1. **Palindromo** *(pending implementation)* - Reads a phrase, stores it character by character in a stack, and determines if the phrase reads the same forwards and backwards.
-2. **Comparar dos pilas** *(pending implementation)* - Reads two stacks from user input and determines if they are identical (same size and same content in each position).
+1. **Palindromo** - Reads a phrase, normalizes it (removes spaces, lowercases), pushes each character onto a stack, and compares by popping: if the reversed order matches the original, the phrase is a palindrome.
+2. **Comparar dos pilas** - Reads two stacks character by character (type `end` to finish each one), displays both, and calls `pila1.comparteStack(pila2)` to determine if they are identical (same size and same content in each position).
 3. **Verificar parentesis** - Reads an arithmetic expression and determines if its parentheses are balanced, i.e., every opening parenthesis has a corresponding closing one.
 
 ## Structure
