@@ -28,7 +28,11 @@ public class ControladorCompararPilas {
         vista.mostrarMensaje("Ingrese los elementos de la Pila 1 uno por uno (solo 1 caracter por elemento), presione Enter despues de cada elemento. Escriba 'end' y presione Enter para terminar:");
         String elemento1;
         while (!(elemento1 = vista.leerTexto("  Elemento: ")).equals("end")) {
-            pila1.apilar(elemento1.charAt(0));
+            if (!elemento1.isEmpty()) {
+                pila1.apilar(elemento1.charAt(0));
+            } else {
+                vista.mostrarMensaje("  Elemento vacio, no se inserto. Ingrese un caracter valido.");
+            }
         }
 
         // Crear pila 2
@@ -38,7 +42,11 @@ public class ControladorCompararPilas {
         vista.mostrarMensaje("Ingrese los elementos de la Pila 2 uno por uno (solo 1 caracter por elemento), presione Enter despues de cada elemento. Escriba 'end' y presione Enter para terminar:");
         String elemento2;
         while (!(elemento2 = vista.leerTexto("  Elemento: ")).equals("end")) {
-            pila2.apilar(elemento2.charAt(0));
+            if (!elemento2.isEmpty()) {
+                pila2.apilar(elemento2.charAt(0));
+            } else {
+                vista.mostrarMensaje("  Elemento vacio, no se inserto. Ingrese un caracter valido.");
+            }
         }
 
         vista.mostrarLinea();
