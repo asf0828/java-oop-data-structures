@@ -26,7 +26,10 @@ public class Vista {
      * @param mensaje El mensaje a mostrar antes de leer
      * @return El texto ingresado por el usuario
      */
-    public String leerTexto(String mensaje) { return null; }
+    public String leerTexto(String mensaje) {
+        System.out.print(mensaje);
+        return scanner.nextLine().trim();
+    }
 
     /**
      * Muestra un mensaje y lee un numero entero ingresado por el usuario.
@@ -34,7 +37,16 @@ public class Vista {
      * @param mensaje El mensaje a mostrar antes de leer
      * @return El numero entero ingresado por el usuario
      */
-    public int leerEntero(String mensaje) { return 0; }
+    public int leerEntero(String mensaje) {
+        System.out.print(mensaje);
+        while (!scanner.hasNextInt()) {
+            scanner.next();
+            System.out.print("Por favor ingrese un numero entero: ");
+        }
+        int valor = scanner.nextInt();
+        scanner.nextLine();
+        return valor;
+    }
 
     /**
      * Muestra el contenido de una fila de frente a fin, separado por comas.
@@ -42,17 +54,28 @@ public class Vista {
      * @param etiqueta El titulo o etiqueta a mostrar antes de la fila
      * @param cola     La cola cuyos elementos se mostraran
      */
-    public void mostrarFila(String etiqueta, Cola cola) { }
+    public void mostrarFila(String etiqueta, Cola cola) {
+        System.out.println(etiqueta);
+        Nodo actual = cola.obtenerFrente();
+        while (actual != null) {
+            System.out.println(actual.obtenerNombre());
+            actual = actual.obtenerSiguiente();
+        }
+    }
 
     /**
      * Muestra un mensaje generico por consola.
      * @param mensaje El mensaje a mostrar
      */
-    public void mostrarMensaje(String mensaje) { }
+    public void mostrarMensaje(String mensaje) {
+        System.out.println(mensaje);
+    }
 
     /**
      * Muestra una linea divisoria decorativa.
      */
-    public void mostrarLinea() { }
+    public void mostrarLinea() {
+        System.out.println("------------------------------------------");
+    }
 
 }
