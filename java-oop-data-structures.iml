@@ -6,6 +6,9 @@
       <sourceFolder url="file://$MODULE_DIR$/ListaSimple/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/OperacionesLIstas/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/OperacionesPilas/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/GestionEstudiantes/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TurnosBanco/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ArbolesBinarios/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
