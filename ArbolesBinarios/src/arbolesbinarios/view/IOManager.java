@@ -8,40 +8,34 @@ import arbolesbinarios.model.List;
 import arbolesbinarios.model.ListNode;
 
 /**
- * IOManager handles all console input and output for this application.
+ * Maneja toda la entrada y salida por consola de la aplicación.
  *
- * <p>This class follows the view design used in class (see professor's
- * {@code IOManager.java}): a single {@code BufferedReader} is shared
- * across all instances, and each method either prints to
- * {@code System.out} or reads a line from standard input.</p>
- *
- * <p>Input methods declare {@code throws IOException} so that the
- * calling controller decides how to handle read errors.</p>
- *
- * <p>This class contains no business logic — it only formats and
- * displays data that the controller passes to it.</p>
+ * Utiliza un {@code BufferedReader} compartido para leer desde la entrada
+ * estándar. Los métodos de entrada declaran {@code throws IOException} para
+ * que el controlador decida cómo manejar los errores de lectura.
+ * No contiene lógica de negocio.
  */
 public class IOManager {
 
-    /** Shared reader for standard input, following the professor's pattern. */
+    /** Lector compartido para la entrada estándar. */
     private static final BufferedReader br =
             new BufferedReader(new InputStreamReader(System.in));
 
     /**
-     * Prints any message to the console followed by a newline.
+     * Imprime un mensaje en consola seguido de un salto de línea.
      *
-     * @param message the text to display
+     * @param message el texto a mostrar
      */
     public void showMessage(String message) {
         System.out.println(message);
     }
 
     /**
-     * Prints a prompt and returns the line typed by the user.
+     * Imprime un mensaje y retorna la línea ingresada por el usuario.
      *
-     * @param message the prompt to show before reading
-     * @return the trimmed line entered by the user
-     * @throws IOException if the input stream cannot be read
+     * @param message el mensaje a mostrar antes de leer
+     * @return la línea leída
+     * @throws IOException si no se puede leer desde la entrada estándar
      */
     public String getString(String message) throws IOException {
         System.out.println(message);
@@ -49,11 +43,11 @@ public class IOManager {
     }
 
     /**
-     * Prints a prompt and returns the integer typed by the user.
+     * Imprime un mensaje y retorna el entero ingresado por el usuario.
      *
-     * @param message the prompt to show before reading
-     * @return the integer entered by the user
-     * @throws IOException if the input stream cannot be read
+     * @param message el mensaje a mostrar antes de leer
+     * @return el entero leído
+     * @throws IOException si no se puede leer desde la entrada estándar
      */
     public int getInt(String message) throws IOException {
         System.out.println(message);
@@ -61,16 +55,10 @@ public class IOManager {
     }
 
     /**
-     * Displays all values in a {@link List}, followed by the total count.
+     * Muestra todos los valores de una {@link List} seguidos del total de elementos.
      *
-     * <p>Example output:
-     * <pre>
-     *   Preorder: 24, 27, 32, 4, 3, 6, 5, 12, 1, 8, 2  (11 nodes)
-     * </pre>
-     * </p>
-     *
-     * @param label the heading to print before the list values
-     * @param list  the List whose values will be displayed
+     * @param label el encabezado a imprimir antes de los valores
+     * @param list  la lista cuyos valores se mostrarán
      */
     public void showList(String label, List list) {
         System.out.print(label + " ");
@@ -82,15 +70,14 @@ public class IOManager {
             }
             current = current.getNext();
         }
-        System.out.println("  (" + list.size() + " nodes)");
+        System.out.println("  (" + list.size() + " nodos)");
     }
 
     /**
-     * Displays a label followed by an integer value on one line.
-     * Used to show the tree height.
+     * Muestra una etiqueta seguida de un valor entero en una sola línea.
      *
-     * @param label the heading to print before the integer
-     * @param value the integer value to display
+     * @param label el encabezado a imprimir antes del entero
+     * @param value el valor entero a mostrar
      */
     public void showInt(String label, int value) {
         System.out.println(label + " " + value);

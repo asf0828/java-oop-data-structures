@@ -4,29 +4,23 @@ import arbolesbinarios.controller.TreeController;
 import arbolesbinarios.view.IOManager;
 
 /**
- * Runner is the entry point of the application.
+ * Punto de entrada de la aplicación.
  *
- * <p>It follows the MVC wiring pattern: create the view first,
- * inject it into the controller, then call {@code execute()}.</p>
+ * Sigue el patrón MVC: crea la vista, la inyecta en el controlador
+ * y delega la ejecución llamando a {@code execute()}.
+ * No contiene lógica de negocio.
  *
- * <p>No business logic lives here — Runner only assembles the
- * three MVC layers and starts execution.</p>
- *
- * <p>Course: Programacion III — Taller III (Arboles) — 2026-I</p>
- *
- * <p>Team members:</p>
- * <ul>
- *   <li>Maria Elena Molina Torres. Codigo 200631</li>
- *   <li>Alexander Jose Sandoval Figueredo. Codigo 200582</li>
- *   <li>Yarik Valeria Serrano Recaman. Codigo 200583</li>
- * </ul>
+ * Integrantes del equipo:
+ * - Maria Elena Molina Torres. Codigo 200631
+ * - Alexander Jose Sandoval Figueredo. Codigo 200582
+ * - Yarik Valeria Serrano Recaman. Codigo 200583
  */
 public class Runner {
 
     /**
-     * Application entry point.
+     * Método principal de la aplicación.
      *
-     * @param args command-line arguments (not used)
+     * @param args argumentos de línea de comandos (no se usan)
      */
     public static void main(String[] args) {
         IOManager io = new IOManager();
@@ -34,7 +28,7 @@ public class Runner {
         try {
             controller.execute();
         } catch (Exception e) {
-            System.err.println("Error reading input: " + e.getMessage());
+            System.err.println("Error leyendo entrada: " + e.getMessage());
         }
     }
 }

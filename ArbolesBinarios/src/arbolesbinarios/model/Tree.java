@@ -1,78 +1,66 @@
 package arbolesbinarios.model;
 
 /**
- * Tree represents a binary tree and provides operations on it.
+ * Árbol binario con operaciones de recorrido y consulta.
  *
- * <p>This class only defines the tree structure ({@code root}) and the
- * algorithms that operate on it. It does <em>not</em> build the tree itself —
- * that responsibility belongs to the controller, following the professor's
- * TAD design (see {@code TreeController#buildTree()}).</p>
+ * Esta clase define únicamente la estructura del árbol ({@code root}) y
+ * los algoritmos que operan sobre él. No construye el árbol ni realiza
+ * ninguna salida por consola.
  *
- * <p>Each method that collects results receives an empty {@link List} from
- * the caller, fills it recursively, and returns it. This pattern is taken
- * directly from the professor's TAD:
- * <pre>
- *   public List preorder(TreeNode root, List list) { ... return list; }
- * </pre>
- * </p>
- *
- * <p>No {@code System.out} calls appear in this class. All output is
- * handled by the view layer ({@code IOManager}).</p>
+ * Los métodos que recopilan resultados reciben una {@link List} vacía
+ * del llamador, la llenan de forma recursiva y la retornan.
  */
 public class Tree {
 
     private TreeNode root;
 
     /**
-     * Creates an empty tree with no root node.
-     * The root must be set via {@link #setRoot(TreeNode)} before any
-     * operation is called.
+     * Crea un árbol vacío sin nodo raíz.
+     * La raíz debe asignarse con {@link #setRoot(TreeNode)} antes de
+     * invocar cualquier operación.
      */
     public Tree() {
         this.root = null;
     }
 
     /**
-     * Sets the root node of this tree.
+     * Asigna el nodo raíz de este árbol.
      *
-     * @param root the TreeNode to use as the root
+     * @param root el TreeNode a usar como raíz
      */
     public void setRoot(TreeNode root) {
         this.root = root;
     }
 
     /**
-     * Returns the root node of this tree, or null if the tree is empty.
+     * Retorna el nodo raíz del árbol, o null si el árbol está vacío.
      *
-     * @return the root TreeNode
+     * @return el TreeNode raíz
      */
     public TreeNode getRoot() {
         return root;
     }
 
     /**
-     * Returns true if this tree has no root node.
+     * Indica si el árbol no tiene nodo raíz.
      *
-     * @return true when root is null
+     * @return true si la raíz es null
      */
     public boolean isEmpty() {
         return root == null;
     }
 
     // ============================================================
-    // TRAVERSALS
+    // RECORRIDOS
     // ============================================================
 
     /**
-     * Performs a preorder traversal (root → left → right) and appends
-     * each visited node's value to the given list.
+     * Recorrido preorden (raíz → izquierda → derecha).
+     * Agrega el valor de cada nodo visitado a la lista dada.
      *
-     * <p>Preorder visits the current node first, then recurses into the
-     * left subtree, then the right subtree.</p>
-     *
-     * @param node the subtree root to traverse (null is a safe base case)
-     * @param list the list that collects the traversal values
-     * @return the same list, now containing the traversal result
+     * @param node el nodo raíz del subárbol a recorrer (null es caso base)
+     * @param list la lista que acumula los valores del recorrido
+     * @return la misma lista con el resultado del recorrido
      */
     public List preorder(TreeNode node, List list) {
         if (node != null) {
@@ -84,16 +72,12 @@ public class Tree {
     }
 
     /**
-     * Performs an inorder traversal (left → root → right) and appends
-     * each visited node's value to the given list.
+     * Recorrido inorden (izquierda → raíz → derecha).
+     * Agrega el valor de cada nodo visitado a la lista dada.
      *
-     * <p>Inorder visits the left subtree first, then the current node,
-     * then the right subtree. For a binary search tree this produces
-     * values in sorted order.</p>
-     *
-     * @param node the subtree root to traverse (null is a safe base case)
-     * @param list the list that collects the traversal values
-     * @return the same list, now containing the traversal result
+     * @param node el nodo raíz del subárbol a recorrer (null es caso base)
+     * @param list la lista que acumula los valores del recorrido
+     * @return la misma lista con el resultado del recorrido
      */
     public List inorder(TreeNode node, List list) {
         if (node != null) {
@@ -105,16 +89,12 @@ public class Tree {
     }
 
     /**
-     * Performs a postorder traversal (left → right → root) and appends
-     * each visited node's value to the given list.
+     * Recorrido postorden (izquierda → derecha → raíz).
+     * Agrega el valor de cada nodo visitado a la lista dada.
      *
-     * <p>Postorder visits both subtrees before the current node.
-     * It is commonly used to safely delete or process all children
-     * before their parent.</p>
-     *
-     * @param node the subtree root to traverse (null is a safe base case)
-     * @param list the list that collects the traversal values
-     * @return the same list, now containing the traversal result
+     * @param node el nodo raíz del subárbol a recorrer (null es caso base)
+     * @param list la lista que acumula los valores del recorrido
+     * @return la misma lista con el resultado del recorrido
      */
     public List postorder(TreeNode node, List list) {
         if (node != null) {
@@ -126,18 +106,17 @@ public class Tree {
     }
 
     // ============================================================
-    // QUERY METHODS
+    // MÉTODOS DE CONSULTA
     // ============================================================
 
     /**
-     * Collects the values of all parent nodes into a list.
+     * Recopila los valores de todos los nodos padre en una lista.
+     * Un nodo padre es aquel que tiene al menos un hijo (izquierdo,
+     * derecho o ambos).
      *
-     * <p>A parent node is any node that has at least one child
-     * (left child, right child, or both).</p>
-     *
-     * @param node the subtree root to examine (null is a safe base case)
-     * @param list the list that collects the parent node values
-     * @return the same list, now containing all parent node values
+     * @param node el nodo raíz del subárbol a examinar (null es caso base)
+     * @param list la lista que acumula los valores de los nodos padre
+     * @return la misma lista con todos los nodos padre
      */
     public List getParents(TreeNode node, List list) {
         if (node != null) {
@@ -151,16 +130,13 @@ public class Tree {
     }
 
     /**
-     * Collects the values of all child nodes into a list.
+     * Recopila los valores de todos los nodos hijo en una lista.
+     * Un nodo hijo es aquel referenciado como hijo izquierdo o derecho
+     * de otro nodo. Cada nodo no raíz queda capturado exactamente una vez.
      *
-     * <p>A child node is any node that is referenced as the left or
-     * right child of another node. This method adds both children of
-     * each visited node, which means every non-root node is captured
-     * exactly once.</p>
-     *
-     * @param node the subtree root to examine (null is a safe base case)
-     * @param list the list that collects the child node values
-     * @return the same list, now containing all child node values
+     * @param node el nodo raíz del subárbol a examinar (null es caso base)
+     * @param list la lista que acumula los valores de los nodos hijo
+     * @return la misma lista con todos los nodos hijo
      */
     public List getChildren(TreeNode node, List list) {
         if (node != null) {
@@ -177,14 +153,13 @@ public class Tree {
     }
 
     /**
-     * Collects the values of all leaf nodes into a list.
+     * Recopila los valores de todos los nodos hoja en una lista.
+     * Un nodo hoja no tiene hijos: tanto su referencia izquierda como
+     * derecha son null.
      *
-     * <p>A leaf node has no children: both its left and right
-     * references are null.</p>
-     *
-     * @param node the subtree root to examine (null is a safe base case)
-     * @param list the list that collects the leaf node values
-     * @return the same list, now containing all leaf node values
+     * @param node el nodo raíz del subárbol a examinar (null es caso base)
+     * @param list la lista que acumula los valores de los nodos hoja
+     * @return la misma lista con todos los nodos hoja
      */
     public List getLeaves(TreeNode node, List list) {
         if (node != null) {
@@ -198,14 +173,12 @@ public class Tree {
     }
 
     /**
-     * Calculates the height of the subtree rooted at the given node.
+     * Calcula la altura del subárbol con raíz en el nodo dado.
+     * La altura es el número de niveles desde el nodo hasta la hoja más
+     * lejana. Un subárbol vacío tiene altura 0.
      *
-     * <p>The height is defined as the number of edges on the longest
-     * path from the given node down to a leaf. An empty subtree has
-     * height 0.</p>
-     *
-     * @param node the subtree root (null returns 0)
-     * @return the height of the subtree
+     * @param node la raíz del subárbol (null retorna 0)
+     * @return la altura del subárbol
      */
     public int height(TreeNode node) {
         if (node == null) {

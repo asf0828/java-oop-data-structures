@@ -1,14 +1,10 @@
 package arbolesbinarios.model;
 
 /**
- * ListNode is a single cell (link) in a singly-linked {@link List}.
+ * Celda de una lista enlazada simple {@link List}.
  *
- * <p>It stores one integer value and a reference to the next cell.
- * When there is no next cell, {@code next} is null.</p>
- *
- * <p>In this project, integer values stored here are the values of
- * tree nodes ({@link TreeNode#getValue()}), collected during tree
- * traversals and queries.</p>
+ * Almacena un valor entero y una referencia a la siguiente celda.
+ * Cuando no hay celda siguiente, {@code next} es null.
  */
 public class ListNode {
 
@@ -16,10 +12,10 @@ public class ListNode {
     private ListNode next;
 
     /**
-     * Creates a new list cell with the given integer value.
-     * The next reference is initialized to null.
+     * Crea una nueva celda con el valor entero dado.
+     * La referencia siguiente se inicializa en null.
      *
-     * @param value the integer value stored in this cell
+     * @param value el valor entero almacenado en esta celda
      */
     public ListNode(int value) {
         this.value = value;
@@ -27,27 +23,27 @@ public class ListNode {
     }
 
     /**
-     * Returns the integer value stored in this cell.
+     * Retorna el valor entero almacenado en esta celda.
      *
-     * @return the cell's value
+     * @return el valor de la celda
      */
     public int getValue() {
         return value;
     }
 
     /**
-     * Returns the next cell in the list, or null if this is the last cell.
+     * Retorna la siguiente celda de la lista, o null si es la última.
      *
-     * @return the next ListNode
+     * @return el siguiente ListNode
      */
     public ListNode getNext() {
         return next;
     }
 
     /**
-     * Sets the next cell in the list.
+     * Asigna la siguiente celda de la lista.
      *
-     * @param next the ListNode to link as the next cell
+     * @param next el ListNode a enlazar como celda siguiente
      */
     public void setNext(ListNode next) {
         this.next = next;

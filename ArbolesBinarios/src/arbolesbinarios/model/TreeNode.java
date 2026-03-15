@@ -1,15 +1,10 @@
 package arbolesbinarios.model;
 
 /**
- * TreeNode represents a single node in a binary tree.
+ * Representa un nodo de un árbol binario.
  *
- * <p>Each node holds an integer value and references to its
- * left and right children. When a child does not exist,
- * its reference is null.</p>
- *
- * <p>This class is the building block of the {@link Tree} structure.
- * It follows the node design shown in the professor's TAD (NodeT),
- * adapted to store integer values instead of strings.</p>
+ * Cada nodo almacena un valor entero y referencias a su hijo
+ * izquierdo y derecho. Cuando un hijo no existe, su referencia es null.
  */
 public class TreeNode {
 
@@ -18,10 +13,10 @@ public class TreeNode {
     private TreeNode right;
 
     /**
-     * Creates a new tree node with the given integer value.
-     * Both child references are initialized to null.
+     * Crea un nuevo nodo con el valor entero dado.
+     * Ambas referencias de hijo se inicializan en null.
      *
-     * @param value the integer value stored in this node
+     * @param value el valor entero almacenado en este nodo
      */
     public TreeNode(int value) {
         this.value = value;
@@ -30,45 +25,45 @@ public class TreeNode {
     }
 
     /**
-     * Returns the integer value stored in this node.
+     * Retorna el valor entero almacenado en este nodo.
      *
-     * @return the node's value
+     * @return el valor del nodo
      */
     public int getValue() {
         return value;
     }
 
     /**
-     * Returns the left child of this node, or null if none.
+     * Retorna el hijo izquierdo de este nodo, o null si no tiene.
      *
-     * @return the left child TreeNode
+     * @return el TreeNode hijo izquierdo
      */
     public TreeNode getLeft() {
         return left;
     }
 
     /**
-     * Returns the right child of this node, or null if none.
+     * Retorna el hijo derecho de este nodo, o null si no tiene.
      *
-     * @return the right child TreeNode
+     * @return el TreeNode hijo derecho
      */
     public TreeNode getRight() {
         return right;
     }
 
     /**
-     * Sets the left child of this node.
+     * Asigna el hijo izquierdo de este nodo.
      *
-     * @param left the TreeNode to assign as the left child
+     * @param left el TreeNode a asignar como hijo izquierdo
      */
     public void setLeft(TreeNode left) {
         this.left = left;
     }
 
     /**
-     * Sets the right child of this node.
+     * Asigna el hijo derecho de este nodo.
      *
-     * @param right the TreeNode to assign as the right child
+     * @param right el TreeNode a asignar como hijo derecho
      */
     public void setRight(TreeNode right) {
         this.right = right;

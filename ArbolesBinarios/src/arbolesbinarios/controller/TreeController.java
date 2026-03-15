@@ -8,18 +8,12 @@ import arbolesbinarios.model.TreeNode;
 import arbolesbinarios.view.IOManager;
 
 /**
- * TreeController orchestrates the application flow.
+ * Controlador principal de la aplicación.
  *
- * <p>It connects the view ({@link IOManager}) with the model ({@link Tree}).
- * Following the MVC pattern, the controller:</p>
- * <ol>
- *   <li>Builds the binary tree (responsibility of the controller, per
- *       the professor's TAD — the model only defines the structure).</li>
- *   <li>Calls tree operations to collect results.</li>
- *   <li>Passes those results to the view for display.</li>
- * </ol>
- *
- * <p>No {@code System.out} calls appear in this class.</p>
+ * Conecta la vista ({@link IOManager}) con el modelo ({@link Tree}).
+ * Siguiendo el patrón MVC, el controlador construye el árbol, invoca
+ * las operaciones sobre él y delega la presentación de resultados a
+ * la vista. No contiene llamadas a {@code System.out}.
  */
 public class TreeController {
 
@@ -27,9 +21,9 @@ public class TreeController {
     private Tree tree;
 
     /**
-     * Creates the controller, injecting the view and building the tree.
+     * Crea el controlador, inyectando la vista y construyendo el árbol.
      *
-     * @param io the IOManager instance used for all console output
+     * @param io la instancia de IOManager usada para toda la salida por consola
      */
     public TreeController(IOManager io) {
         this.io   = io;
@@ -37,17 +31,12 @@ public class TreeController {
     }
 
     /**
-     * Builds and returns the binary tree defined in the workshop statement.
+     * Construye y retorna el árbol binario con la estructura definida.
      *
-     * <p>The tree represented as a list notation is:
-     * {@code 24 ( 27 ( 32 , 4 ( 3 , 6 ) ), 5 ( 12 , 1 ( 8 ( null , 2 ), null ) ) )}</p>
+     * El árbol en notación de lista es:
+     * {@code 24 ( 27 ( 32 , 4 ( 3 , 6 ) ), 5 ( 12 , 1 ( 8 ( null , 2 ), null ) ) )}
      *
-     * <p>This method follows the pattern shown in the professor's TAD (page 8):
-     * tree construction is done in the controller, not inside the Tree model.
-     * The model's job is to provide operations; the controller's job is to
-     * decide what data to load.</p>
-     *
-     * @return the fully constructed Tree ready for queries
+     * @return el árbol completamente construido listo para consultas
      */
     private Tree buildTree() {
         Tree t = new Tree();
@@ -85,54 +74,45 @@ public class TreeController {
     }
 
     /**
-     * Runs the full sequence of tree operations and displays each result.
+     * Ejecuta la secuencia completa de operaciones sobre el árbol
+     * y muestra cada resultado a través de la vista.
      *
-     * <p>The execution order is:</p>
-     * <ol>
-     *   <li>Wait for user to press Enter (demonstrates BufferedReader use).</li>
-     *   <li>Display preorder, inorder, and postorder traversals.</li>
-     *   <li>Display parent nodes with count.</li>
-     *   <li>Display child nodes with count.</li>
-     *   <li>Display leaf nodes with count.</li>
-     *   <li>Display the tree height.</li>
-     * </ol>
-     *
-     * @throws IOException if the view cannot read from standard input
+     * @throws IOException si la vista no puede leer desde la entrada estándar
      */
     public void execute() throws IOException {
-        io.getString("Press ENTER to start...");
+        io.getString("Presione ENTER para iniciar...");
 
-        io.showMessage("=== BINARY TREE ===");
-        io.showMessage("Tree: 24(27(32, 4(3,6)), 5(12, 1(8(null,2), null)))");
+        io.showMessage("=== ÁRBOL BINARIO ===");
+        io.showMessage("Árbol: 24(27(32, 4(3,6)), 5(12, 1(8(null,2), null)))");
         io.showMessage("");
 
-        // Traversals
-        io.showMessage("--- Traversals ---");
-        io.showList("Preorder: ",  tree.preorder(tree.getRoot(),  new List()));
-        io.showList("Inorder:  ",  tree.inorder(tree.getRoot(),   new List()));
-        io.showList("Postorder:",  tree.postorder(tree.getRoot(), new List()));
+        // Recorridos
+        io.showMessage("--- Recorridos ---");
+        io.showList("Preorden:   ", tree.preorder(tree.getRoot(),  new List()));
+        io.showList("Inorden:    ", tree.inorder(tree.getRoot(),   new List()));
+        io.showList("Postorden:  ", tree.postorder(tree.getRoot(), new List()));
         io.showMessage("");
 
-        // Parent nodes
-        io.showMessage("--- Parent nodes ---");
+        // Nodos padre
+        io.showMessage("--- Nodos padre ---");
         List parents = tree.getParents(tree.getRoot(), new List());
-        io.showList("Parents:", parents);
+        io.showList("Padres:", parents);
         io.showMessage("");
 
-        // Child nodes
-        io.showMessage("--- Child nodes ---");
+        // Nodos hijo
+        io.showMessage("--- Nodos hijo ---");
         List children = tree.getChildren(tree.getRoot(), new List());
-        io.showList("Children:", children);
+        io.showList("Hijos:", children);
         io.showMessage("");
 
-        // Leaf nodes
-        io.showMessage("--- Leaf nodes ---");
+        // Nodos hoja
+        io.showMessage("--- Nodos hoja ---");
         List leaves = tree.getLeaves(tree.getRoot(), new List());
-        io.showList("Leaves:", leaves);
+        io.showList("Hojas:", leaves);
         io.showMessage("");
 
-        // Height
-        io.showMessage("--- Tree height ---");
-        io.showInt("Height:", tree.height(tree.getRoot()));
+        // Altura
+        io.showMessage("--- Altura del árbol ---");
+        io.showInt("Altura:", tree.height(tree.getRoot()));
     }
 }
