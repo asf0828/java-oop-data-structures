@@ -18,11 +18,11 @@ The program displays:
 4. How many and which nodes are **leaf** nodes (have no children)
 5. The **height** of the tree
 
-All tree operations are implemented as methods in the `Tree` class that receive a `List` and return it filled with results — following the professor's TAD design directly.
+All tree operations are implemented as methods in the `Tree` class that receive a `List` and return it filled with results.
 
 ## Architectural Note
 
-`buildTree()` lives in `TreeController`, not in `Tree`. This follows the professor's TAD (page 8), where tree construction is shown inside the `Control` class.
+`buildTree()` lives in `TreeController`, not in `Tree`.
 
 The reasoning: the `Tree` model only defines the structure and the algorithms. The controller decides *what data* to load into it. This respects the Single Responsibility Principle — the model is reusable with any tree, and the controller owns the domain-specific initialization.
 
@@ -120,9 +120,13 @@ ArbolesBinarios/
 ## How to Run
 
 ```bash
-cd ArbolesBinarios
-mkdir -p bin
+# Navigate to the project directory
+cd /path/to/ArbolesBinarios
+
+# Compile the project
 javac -d bin $(find src -name "*.java")
+
+# Run the project
 java -cp bin arbolesbinarios.runner.Runner
 ```
 
