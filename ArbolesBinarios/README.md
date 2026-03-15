@@ -122,32 +122,32 @@ ArbolesBinarios/
 ```bash
 cd ArbolesBinarios
 mkdir -p bin
-~/.sdkman/candidates/java/current/bin/javac -d bin $(find src -name "*.java")
-~/.sdkman/candidates/java/current/bin/java -cp bin arbolesbinarios.runner.Runner
+javac -d bin $(find src -name "*.java")
+java -cp bin arbolesbinarios.runner.Runner
 ```
 
 Expected output:
 
 ```
-Press ENTER to start...
+Presione ENTER para iniciar...
 
-=== BINARY TREE ===
-Tree: 24(27(32, 4(3,6)), 5(12, 1(8(null,2), null)))
+=== ÁRBOL BINARIO ===
+Árbol: 24(27(32, 4(3,6)), 5(12, 1(8(null,2), null)))
 
---- Traversals ---
-Preorder:  24, 27, 32, 4, 3, 6, 5, 12, 1, 8, 2  (11 nodes)
-Inorder:   32, 27, 3, 4, 6, 24, 12, 5, 8, 2, 1  (11 nodes)
-Postorder: 32, 3, 6, 4, 27, 12, 2, 8, 1, 5, 24  (11 nodes)
+--- Recorridos ---
+Preorden:   24, 27, 32, 4, 3, 6, 5, 12, 1, 8, 2  (11 nodos)
+Inorden:    32, 27, 3, 4, 6, 24, 12, 5, 8, 2, 1  (11 nodos)
+Postorden:  32, 3, 6, 4, 27, 12, 2, 8, 1, 5, 24  (11 nodos)
 
---- Parent nodes ---
-Parents: 24, 27, 4, 5, 1, 8  (6 nodes)
+--- Nodos padre ---
+Padres: 24, 27, 4, 5, 1, 8  (6 nodos)
 
---- Child nodes ---
-Children: 27, 5, 32, 4, 3, 6, 12, 1, 8, 2  (10 nodes)
+--- Nodos hijo ---
+Hijos: 27, 5, 32, 4, 3, 6, 12, 1, 8, 2  (10 nodos)
 
---- Leaf nodes ---
-Leaves: 32, 3, 6, 12, 2  (5 nodes)
+--- Nodos hoja ---
+Hojas: 32, 3, 6, 12, 2  (5 nodos)
 
---- Tree height ---
-Height: 5
+--- Altura del árbol ---
+Altura: 5
 ```
