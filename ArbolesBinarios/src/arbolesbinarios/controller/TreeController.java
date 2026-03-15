@@ -1,7 +1,7 @@
 
-package controller;
+package arbolesbinarios.controller;
 
-import model.Tree;
+import arbolesbinarios.model.Tree;
 
 /**
  * Controlador del patrón MVC.

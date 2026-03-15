@@ -1,5 +1,5 @@
 
-package model;
+package arbolesbinarios.model;
 
 /**
  * Implementación simple de una lista para almacenar nodos.

@@ -1,7 +1,7 @@
 
-package view;
+package arbolesbinarios.view;
 
-import controller.TreeController;
+import arbolesbinarios.controller.TreeController;
 
 /**
  * Vista del sistema.

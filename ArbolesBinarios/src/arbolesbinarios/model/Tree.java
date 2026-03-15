@@ -1,5 +1,5 @@
 
-package model;
+package arbolesbinarios.model;
 
 /**
  * Clase Tree

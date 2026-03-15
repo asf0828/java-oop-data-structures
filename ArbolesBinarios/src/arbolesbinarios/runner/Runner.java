@@ -1,7 +1,7 @@
 
-package runner;
+package arbolesbinarios.runner;
 
-import view.ConsoleView;
+import arbolesbinarios.view.ConsoleView;
 
 /**
  * Clase Runner (Main)
