@@ -1,4 +1,3 @@
-
 package arbolesbinarios.model;
 
 /**
@@ -13,7 +12,7 @@ package arbolesbinarios.model;
 
 public class Tree {
 
-    private Node root;
+    private TreeNode root;
     private NodeList nodes;
 
     public Tree(){
@@ -27,35 +26,35 @@ public class Tree {
      */
     private void buildTree(){
 
-        Node n24 = new Node(24);
-        Node n27 = new Node(27);
-        Node n5 = new Node(5);
-        Node n32 = new Node(32);
-        Node n4 = new Node(4);
-        Node n3 = new Node(3);
-        Node n6 = new Node(6);
-        Node n12 = new Node(12);
-        Node n1 = new Node(1);
-        Node n8 = new Node(8);
-        Node n2 = new Node(2);
+        TreeNode n24 = new TreeNode(24);
+        TreeNode n27 = new TreeNode(27);
+        TreeNode n5 = new TreeNode(5);
+        TreeNode n32 = new TreeNode(32);
+        TreeNode n4 = new TreeNode(4);
+        TreeNode n3 = new TreeNode(3);
+        TreeNode n6 = new TreeNode(6);
+        TreeNode n12 = new TreeNode(12);
+        TreeNode n1 = new TreeNode(1);
+        TreeNode n8 = new TreeNode(8);
+        TreeNode n2 = new TreeNode(2);
 
         root = n24;
 
-        n24.left = n27;
-        n24.right = n5;
+        n24.setLeft(n27);
+        n24.setRight(n5);
 
-        n27.left = n32;
-        n27.right = n4;
+        n27.setLeft(n32);
+        n27.setRight(n4);
 
-        n4.left = n3;
-        n4.right = n6;
+        n4.setLeft(n3);
+        n4.setRight(n6);
 
-        n5.left = n12;
-        n5.right = n1;
+        n5.setLeft(n12);
+        n5.setRight(n1);
 
-        n1.left = n8;
+        n1.setLeft(n8);
 
-        n8.right = n2;
+        n8.setRight(n2);
 
         nodes.add(n24);
         nodes.add(n27);
@@ -72,27 +71,27 @@ public class Tree {
 
     // ================= RECORRIDOS =================
 
-    public void preorder(Node node){
+    public void preorder(TreeNode node){
         if(node != null){
-            System.out.print(node.value + " ");
-            preorder(node.left);
-            preorder(node.right);
+            System.out.print(node.getValue() + " ");
+            preorder(node.getLeft());
+            preorder(node.getRight());
         }
     }
 
-    public void inorder(Node node){
+    public void inorder(TreeNode node){
         if(node != null){
-            inorder(node.left);
-            System.out.print(node.value + " ");
-            inorder(node.right);
+            inorder(node.getLeft());
+            System.out.print(node.getValue() + " ");
+            inorder(node.getRight());
         }
     }
 
-    public void postorder(Node node){
+    public void postorder(TreeNode node){
         if(node != null){
-            postorder(node.left);
-            postorder(node.right);
-            System.out.print(node.value + " ");
+            postorder(node.getLeft());
+            postorder(node.getRight());
+            System.out.print(node.getValue() + " ");
         }
     }
 
@@ -117,10 +116,10 @@ public class Tree {
         int count = 0;
 
         for(int i=0;i<nodes.size();i++){
-            Node n = nodes.get(i);
+            TreeNode n = nodes.get(i);
 
-            if(n.left != null || n.right != null){
-                System.out.print(n.value + " ");
+            if(n.getLeft() != null || n.getRight() != null){
+                System.out.print(n.getValue() + " ");
                 count++;
             }
         }
@@ -135,10 +134,10 @@ public class Tree {
         int count = 0;
 
         for(int i=0;i<nodes.size();i++){
-            Node n = nodes.get(i);
+            TreeNode n = nodes.get(i);
 
             if(n != root){
-                System.out.print(n.value + " ");
+                System.out.print(n.getValue() + " ");
                 count++;
             }
         }
@@ -153,10 +152,10 @@ public class Tree {
         int count = 0;
 
         for(int i=0;i<nodes.size();i++){
-            Node n = nodes.get(i);
+            TreeNode n = nodes.get(i);
 
-            if(n.left == null && n.right == null){
-                System.out.print(n.value + " ");
+            if(n.getLeft() == null && n.getRight() == null){
+                System.out.print(n.getValue() + " ");
                 count++;
             }
         }
@@ -166,13 +165,13 @@ public class Tree {
 
     // ================= ALTURA =================
 
-    public int height(Node node){
+    public int height(TreeNode node){
 
         if(node == null)
             return 0;
 
-        int leftHeight = height(node.left);
-        int rightHeight = height(node.right);
+        int leftHeight = height(node.getLeft());
+        int rightHeight = height(node.getRight());
 
         return Math.max(leftHeight, rightHeight) + 1;
     }

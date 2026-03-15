@@ -9,20 +9,20 @@ package arbolesbinarios.model;
 
 public class NodeList {
 
-    private Node[] data;
+    private TreeNode[] data;
     private int size;
 
     public NodeList(){
-        data = new Node[50];
+        data = new TreeNode[50];
         size = 0;
     }
 
-    public void add(Node node){
+    public void add(TreeNode node){
         data[size] = node;
         size++;
     }
 
-    public Node get(int index){
+    public TreeNode get(int index){
         return data[index];
     }
 
