@@ -1,182 +1,218 @@
 package arbolesbinarios.model;
 
 /**
- * Clase Tree
- * Implementa las operaciones solicitadas en el taller.
- * - Recorridos
- * - Padres
- * - Hijos
- * - Hojas
- * - Altura
+ * Tree represents a binary tree and provides operations on it.
+ *
+ * <p>This class only defines the tree structure ({@code root}) and the
+ * algorithms that operate on it. It does <em>not</em> build the tree itself —
+ * that responsibility belongs to the controller, following the professor's
+ * TAD design (see {@code TreeController#buildTree()}).</p>
+ *
+ * <p>Each method that collects results receives an empty {@link List} from
+ * the caller, fills it recursively, and returns it. This pattern is taken
+ * directly from the professor's TAD:
+ * <pre>
+ *   public List preorder(TreeNode root, List list) { ... return list; }
+ * </pre>
+ * </p>
+ *
+ * <p>No {@code System.out} calls appear in this class. All output is
+ * handled by the view layer ({@code IOManager}).</p>
  */
-
 public class Tree {
 
     private TreeNode root;
-    private NodeList nodes;
 
-    public Tree(){
-        nodes = new NodeList();
-        buildTree();
+    /**
+     * Creates an empty tree with no root node.
+     * The root must be set via {@link #setRoot(TreeNode)} before any
+     * operation is called.
+     */
+    public Tree() {
+        this.root = null;
     }
 
     /**
-     * Construcción del árbol dado en el enunciado:
-     * 24 (27 (32, 4 (3,6)), 5 (12, 1 (8 (null,2), null)))
+     * Sets the root node of this tree.
+     *
+     * @param root the TreeNode to use as the root
      */
-    private void buildTree(){
-
-        TreeNode n24 = new TreeNode(24);
-        TreeNode n27 = new TreeNode(27);
-        TreeNode n5 = new TreeNode(5);
-        TreeNode n32 = new TreeNode(32);
-        TreeNode n4 = new TreeNode(4);
-        TreeNode n3 = new TreeNode(3);
-        TreeNode n6 = new TreeNode(6);
-        TreeNode n12 = new TreeNode(12);
-        TreeNode n1 = new TreeNode(1);
-        TreeNode n8 = new TreeNode(8);
-        TreeNode n2 = new TreeNode(2);
-
-        root = n24;
-
-        n24.setLeft(n27);
-        n24.setRight(n5);
-
-        n27.setLeft(n32);
-        n27.setRight(n4);
-
-        n4.setLeft(n3);
-        n4.setRight(n6);
-
-        n5.setLeft(n12);
-        n5.setRight(n1);
-
-        n1.setLeft(n8);
-
-        n8.setRight(n2);
-
-        nodes.add(n24);
-        nodes.add(n27);
-        nodes.add(n5);
-        nodes.add(n32);
-        nodes.add(n4);
-        nodes.add(n3);
-        nodes.add(n6);
-        nodes.add(n12);
-        nodes.add(n1);
-        nodes.add(n8);
-        nodes.add(n2);
+    public void setRoot(TreeNode root) {
+        this.root = root;
     }
 
-    // ================= RECORRIDOS =================
+    /**
+     * Returns the root node of this tree, or null if the tree is empty.
+     *
+     * @return the root TreeNode
+     */
+    public TreeNode getRoot() {
+        return root;
+    }
 
-    public void preorder(TreeNode node){
-        if(node != null){
-            System.out.print(node.getValue() + " ");
-            preorder(node.getLeft());
-            preorder(node.getRight());
+    /**
+     * Returns true if this tree has no root node.
+     *
+     * @return true when root is null
+     */
+    public boolean isEmpty() {
+        return root == null;
+    }
+
+    // ============================================================
+    // TRAVERSALS
+    // ============================================================
+
+    /**
+     * Performs a preorder traversal (root → left → right) and appends
+     * each visited node's value to the given list.
+     *
+     * <p>Preorder visits the current node first, then recurses into the
+     * left subtree, then the right subtree.</p>
+     *
+     * @param node the subtree root to traverse (null is a safe base case)
+     * @param list the list that collects the traversal values
+     * @return the same list, now containing the traversal result
+     */
+    public List preorder(TreeNode node, List list) {
+        if (node != null) {
+            list.insertLast(node.getValue());
+            preorder(node.getLeft(), list);
+            preorder(node.getRight(), list);
         }
+        return list;
     }
 
-    public void inorder(TreeNode node){
-        if(node != null){
-            inorder(node.getLeft());
-            System.out.print(node.getValue() + " ");
-            inorder(node.getRight());
+    /**
+     * Performs an inorder traversal (left → root → right) and appends
+     * each visited node's value to the given list.
+     *
+     * <p>Inorder visits the left subtree first, then the current node,
+     * then the right subtree. For a binary search tree this produces
+     * values in sorted order.</p>
+     *
+     * @param node the subtree root to traverse (null is a safe base case)
+     * @param list the list that collects the traversal values
+     * @return the same list, now containing the traversal result
+     */
+    public List inorder(TreeNode node, List list) {
+        if (node != null) {
+            inorder(node.getLeft(), list);
+            list.insertLast(node.getValue());
+            inorder(node.getRight(), list);
         }
+        return list;
     }
 
-    public void postorder(TreeNode node){
-        if(node != null){
-            postorder(node.getLeft());
-            postorder(node.getRight());
-            System.out.print(node.getValue() + " ");
+    /**
+     * Performs a postorder traversal (left → right → root) and appends
+     * each visited node's value to the given list.
+     *
+     * <p>Postorder visits both subtrees before the current node.
+     * It is commonly used to safely delete or process all children
+     * before their parent.</p>
+     *
+     * @param node the subtree root to traverse (null is a safe base case)
+     * @param list the list that collects the traversal values
+     * @return the same list, now containing the traversal result
+     */
+    public List postorder(TreeNode node, List list) {
+        if (node != null) {
+            postorder(node.getLeft(), list);
+            postorder(node.getRight(), list);
+            list.insertLast(node.getValue());
         }
+        return list;
     }
 
-    public void showTraversals(){
-        System.out.println("PREORDEN:");
-        preorder(root);
-        System.out.println();
+    // ============================================================
+    // QUERY METHODS
+    // ============================================================
 
-        System.out.println("INORDEN:");
-        inorder(root);
-        System.out.println();
-
-        System.out.println("POSTORDEN:");
-        postorder(root);
-        System.out.println();
-    }
-
-    // ================= PADRES =================
-
-    public void showParents(){
-
-        int count = 0;
-
-        for(int i=0;i<nodes.size();i++){
-            TreeNode n = nodes.get(i);
-
-            if(n.getLeft() != null || n.getRight() != null){
-                System.out.print(n.getValue() + " ");
-                count++;
+    /**
+     * Collects the values of all parent nodes into a list.
+     *
+     * <p>A parent node is any node that has at least one child
+     * (left child, right child, or both).</p>
+     *
+     * @param node the subtree root to examine (null is a safe base case)
+     * @param list the list that collects the parent node values
+     * @return the same list, now containing all parent node values
+     */
+    public List getParents(TreeNode node, List list) {
+        if (node != null) {
+            if (node.getLeft() != null || node.getRight() != null) {
+                list.insertLast(node.getValue());
             }
+            getParents(node.getLeft(), list);
+            getParents(node.getRight(), list);
         }
-
-        System.out.println("\nTotal nodos padre: " + count);
+        return list;
     }
 
-    // ================= HIJOS =================
-
-    public void showChildren(){
-
-        int count = 0;
-
-        for(int i=0;i<nodes.size();i++){
-            TreeNode n = nodes.get(i);
-
-            if(n != root){
-                System.out.print(n.getValue() + " ");
-                count++;
+    /**
+     * Collects the values of all child nodes into a list.
+     *
+     * <p>A child node is any node that is referenced as the left or
+     * right child of another node. This method adds both children of
+     * each visited node, which means every non-root node is captured
+     * exactly once.</p>
+     *
+     * @param node the subtree root to examine (null is a safe base case)
+     * @param list the list that collects the child node values
+     * @return the same list, now containing all child node values
+     */
+    public List getChildren(TreeNode node, List list) {
+        if (node != null) {
+            if (node.getLeft() != null) {
+                list.insertLast(node.getLeft().getValue());
             }
-        }
-
-        System.out.println("\nTotal nodos hijo: " + count);
-    }
-
-    // ================= HOJAS =================
-
-    public void showLeaves(){
-
-        int count = 0;
-
-        for(int i=0;i<nodes.size();i++){
-            TreeNode n = nodes.get(i);
-
-            if(n.getLeft() == null && n.getRight() == null){
-                System.out.print(n.getValue() + " ");
-                count++;
+            if (node.getRight() != null) {
+                list.insertLast(node.getRight().getValue());
             }
+            getChildren(node.getLeft(), list);
+            getChildren(node.getRight(), list);
         }
-
-        System.out.println("\nTotal nodos hoja: " + count);
+        return list;
     }
 
-    // ================= ALTURA =================
+    /**
+     * Collects the values of all leaf nodes into a list.
+     *
+     * <p>A leaf node has no children: both its left and right
+     * references are null.</p>
+     *
+     * @param node the subtree root to examine (null is a safe base case)
+     * @param list the list that collects the leaf node values
+     * @return the same list, now containing all leaf node values
+     */
+    public List getLeaves(TreeNode node, List list) {
+        if (node != null) {
+            if (node.getLeft() == null && node.getRight() == null) {
+                list.insertLast(node.getValue());
+            }
+            getLeaves(node.getLeft(), list);
+            getLeaves(node.getRight(), list);
+        }
+        return list;
+    }
 
-    public int height(TreeNode node){
-
-        if(node == null)
+    /**
+     * Calculates the height of the subtree rooted at the given node.
+     *
+     * <p>The height is defined as the number of edges on the longest
+     * path from the given node down to a leaf. An empty subtree has
+     * height 0.</p>
+     *
+     * @param node the subtree root (null returns 0)
+     * @return the height of the subtree
+     */
+    public int height(TreeNode node) {
+        if (node == null) {
             return 0;
-
-        int leftHeight = height(node.getLeft());
+        }
+        int leftHeight  = height(node.getLeft());
         int rightHeight = height(node.getRight());
-
         return Math.max(leftHeight, rightHeight) + 1;
-    }
-
-    public void showHeight(){
-        System.out.println("Altura del arbol: " + height(root));
     }
 }
