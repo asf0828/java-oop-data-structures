@@ -33,6 +33,7 @@ mkdir -p bin
 | `OperacionesLIstas` | `OperacionesLIstas/` | `operacioneslistas.runner.Runner` |
 | `GestionEstudiantes` | `GestionEstudiantes/` | `gestionestudiantes.runner.Runner` |
 | `TurnosBanco` | `TurnosBanco/` | `turnosbanco.runner.Runner` |
+| `PeajeInteligente` | `PeajeInteligente/` | `peajeinteligente.runner.Runner` |
 
 ## Repository Structure
 
@@ -43,6 +44,8 @@ java-oop-data-structures/
 ├── OperacionesLIstas/         # List operations: count chars, compare, remove duplicates
 ├── GestionEstudiantes/        # Queue: search student by name and replace age
 ├── TurnosBanco/               # Two queues with priority: bank client service order
+├── ArbolesBinarios/           # Binary search tree: insert, search, traversals
+├── PeajeInteligente/          # Toll booth system: 4 queues, stack undo, list history
 └── CLAUDE.md
 ```
 
