@@ -4,7 +4,7 @@ Sistema de gestion de peaje en Java que aplica arquitectura MVC y estructuras de
 
 ## Exercise
 
-**Peaje Inteligente** - Registra vehiculos (placa y categoria) y los distribuye automaticamente a la caseta con menos vehiculos en espera. La atencion desencola al primer vehiculo de la caseta seleccionada, lo guarda en una pila de deshacer y en el historial. La opcion de revertir extrae el ultimo vehiculo de la pila. El historial muestra todos los vehiculos atendidos en orden cronologico.
+**Peaje Inteligente** - Registra vehiculos (placa y categoria) de forma manual o automatica y los distribuye a la caseta con menos vehiculos en espera. La atencion desencola todos los vehiculos de la caseta seleccionada en orden FIFO, guarda cada uno en una pila de deshacer y en el historial. La opcion de revertir extrae el ultimo vehiculo atendido de la pila. El historial muestra todos los vehiculos atendidos en orden cronologico. El estado actual muestra la cantidad de vehiculos por caseta, operaciones reversibles e historial acumulado.
 
 ## Class Diagram
 
@@ -21,14 +21,19 @@ classDiagram
         -Queue~Vehicle~ booth4
         -Stack~Vehicle~ undoStack
         -List~Vehicle~ history
+        -Random random
+        -DateTimeFormatter FORMATO_HORA
         +Controller(IOManager io)
         +ejecutar()
         -registrar()
+        -registrarAleatorio()
+        -mostrarEstado()
         -atender()
         -revertir()
         -mostrarHistorial()
         -findShortestBooth() Queue
         -boothByNumber(int number) Queue
+        -generarVehiculo(String timestamp) Vehicle
         -calcularPeaje(int category) double
     }
     class IOManager {
@@ -37,15 +42,18 @@ classDiagram
         +getString(String prompt) String
         +getInt(String prompt) int
         +showMessage(String message)
+        +showState(int size1, int size2, int size3, int size4, int undoSize, int historySize)
     }
     class Vehicle {
         -String plate
         -int category
         -double toll
-        +Vehicle(String plate, int category, double toll)
+        -String timestamp
+        +Vehicle(String plate, int category, double toll, String timestamp)
         +getPlate() String
         +getCategory() int
         +getToll() double
+        +getTimestamp() String
         +toString() String
     }
     class Queue~T~ {
@@ -59,14 +67,18 @@ classDiagram
     }
     class Stack~T~ {
         -Node~T~ top
+        -int size
         +push(T data)
         +pop() T
         +isEmpty() boolean
+        +getSize() int
     }
     class List~T~ {
         -Node~T~ head
+        -int size
         +add(T data)
         +show()
+        +getSize() int
     }
     class Node~T~ {
         -T data
@@ -103,11 +115,11 @@ PeajeInteligente/
 │       ├── view/
 │       │   └── IOManager.java        # Entrada/salida con BufferedReader
 │       └── model/
-│           ├── Vehicle.java          # Dominio: placa, categoria, peaje
+│           ├── Vehicle.java          # Dominio: placa, categoria, peaje, timestamp
 │           ├── Node.java             # Nodo generico enlazado
 │           ├── Queue.java            # Cola FIFO enlazada con contador de tamano
-│           ├── Stack.java            # Pila LIFO enlazada
-│           └── List.java             # Lista enlazada simple
+│           ├── Stack.java            # Pila LIFO enlazada con contador de tamano
+│           └── List.java             # Lista enlazada simple con contador de tamano
 ├── bin/
 └── README.md
 ```

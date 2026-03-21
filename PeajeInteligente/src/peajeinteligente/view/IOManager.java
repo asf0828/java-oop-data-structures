@@ -22,12 +22,15 @@ public class IOManager {
      * @throws IOException si ocurre un error de lectura
      */
     public int showMenu() throws IOException {
+        System.out.println();
         System.out.println("=== Peaje Inteligente ===");
-        System.out.println("1. Registrar vehiculo");
-        System.out.println("2. Atender vehiculo");
-        System.out.println("3. Revertir ultima atencion");
-        System.out.println("4. Ver historial");
-        System.out.println("5. Salir");
+        System.out.println("1. Registrar vehiculo (manual)");
+        System.out.println("2. Registrar vehiculos (automatico: placa y categoria aleatorias)");
+        System.out.println("3. Ver estado actual");
+        System.out.println("4. Atender caseta");
+        System.out.println("5. Revertir ultima atencion");
+        System.out.println("6. Ver historial");
+        System.out.println("0. Salir");
         System.out.print("Opcion: ");
         return Integer.parseInt(reader.readLine().trim());
     }
@@ -63,5 +66,28 @@ public class IOManager {
      */
     public void showMessage(String message) {
         System.out.println(message);
+    }
+
+    /**
+     * Muestra el estado actual de las 4 casetas, la pila de deshacer y el historial.
+     * Solo muestra cantidades — no accede al contenido de las estructuras.
+     *
+     * @param size1       vehiculos en caseta 1
+     * @param size2       vehiculos en caseta 2
+     * @param size3       vehiculos en caseta 3
+     * @param size4       vehiculos en caseta 4
+     * @param undoSize    operaciones reversibles en la pila
+     * @param historySize vehiculos registrados en el historial
+     */
+    public void showState(int size1, int size2, int size3, int size4,
+                          int undoSize, int historySize) {
+        System.out.println();
+        System.out.println("=== Estado actual ===");
+        System.out.println("Caseta 1: " + size1 + " vehiculo(s)");
+        System.out.println("Caseta 2: " + size2 + " vehiculo(s)");
+        System.out.println("Caseta 3: " + size3 + " vehiculo(s)");
+        System.out.println("Caseta 4: " + size4 + " vehiculo(s)");
+        System.out.println("Pila deshacer: " + undoSize
+                + "  |  Historial: " + historySize);
     }
 }

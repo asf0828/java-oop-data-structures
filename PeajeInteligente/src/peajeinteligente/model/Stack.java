@@ -2,6 +2,7 @@ package peajeinteligente.model;
 
 /**
  * Pila enlazada LIFO generica.
+ * Mantiene un contador de tamano para consulta sin recorrido destructivo.
  *
  * @param <T> tipo del elemento almacenado
  */
@@ -9,6 +10,9 @@ public class Stack<T> {
 
     /** Nodo en la cima de la pila. */
     private Node<T> top;
+
+    /** Cantidad de elementos actualmente en la pila. */
+    private int size;
 
     /**
      * Apila un elemento en la cima.
@@ -19,6 +23,7 @@ public class Stack<T> {
         Node<T> node = new Node<>(data);
         node.setNext(top);
         top = node;
+        size++;
     }
 
     /**
@@ -33,6 +38,7 @@ public class Stack<T> {
         }
         T data = top.getData();
         top = top.getNext();
+        size--;
         return data;
     }
 
@@ -43,5 +49,14 @@ public class Stack<T> {
      */
     public boolean isEmpty() {
         return top == null;
+    }
+
+    /**
+     * Retorna la cantidad de elementos en la pila sin recorrido destructivo.
+     *
+     * @return tamano de la pila
+     */
+    public int getSize() {
+        return size;
     }
 }

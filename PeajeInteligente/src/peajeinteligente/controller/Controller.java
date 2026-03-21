@@ -128,7 +128,7 @@ public class Controller {
             Vehicle vehicle = generarVehiculo(tiempo.format(FORMATO_HORA));
             findShortestBooth().enqueue(vehicle);
             io.showMessage("Vehiculo registrado: " + vehicle);
-            tiempo = tiempo.plusMinutes(1 + random.nextInt(5));
+            tiempo = tiempo.plusSeconds(500);
         }
     }
 

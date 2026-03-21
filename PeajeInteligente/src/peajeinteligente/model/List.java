@@ -3,6 +3,7 @@ package peajeinteligente.model;
 /**
  * Lista enlazada simple generica.
  * Permite agregar elementos al final y mostrarlos por consola.
+ * Mantiene un contador de tamano para consulta sin recorrido.
  *
  * @param <T> tipo del elemento almacenado
  */
@@ -10,6 +11,9 @@ public class List<T> {
 
     /** Nodo cabeza de la lista. */
     private Node<T> head;
+
+    /** Cantidad de elementos actualmente en la lista. */
+    private int size;
 
     /**
      * Agrega un elemento al final de la lista.
@@ -20,13 +24,14 @@ public class List<T> {
         Node<T> node = new Node<>(data);
         if (head == null) {
             head = node;
-            return;
+        } else {
+            Node<T> aux = head;
+            while (aux.getNext() != null) {
+                aux = aux.getNext();
+            }
+            aux.setNext(node);
         }
-        Node<T> aux = head;
-        while (aux.getNext() != null) {
-            aux = aux.getNext();
-        }
-        aux.setNext(node);
+        size++;
     }
 
     /**
@@ -38,5 +43,14 @@ public class List<T> {
             System.out.println(aux.getData());
             aux = aux.getNext();
         }
+    }
+
+    /**
+     * Retorna la cantidad de elementos en la lista.
+     *
+     * @return tamano de la lista
+     */
+    public int getSize() {
+        return size;
     }
 }
