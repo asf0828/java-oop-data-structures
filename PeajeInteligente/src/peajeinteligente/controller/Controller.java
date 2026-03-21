@@ -7,6 +7,9 @@ import peajeinteligente.model.Vehicle;
 import peajeinteligente.view.IOManager;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 /**
  * Controlador principal del sistema de peaje.
@@ -30,11 +33,18 @@ public class Controller {
     /** Caseta 4. */
     private Queue<Vehicle> booth4;
 
-    /** Pila de deshacer: almacena el ultimo vehiculo atendido por caseta. */
+    /** Pila de deshacer: permite revertir la ultima atencion. */
     private Stack<Vehicle> undoStack;
 
     /** Historial cronologico de vehiculos atendidos. */
     private List<Vehicle> history;
+
+    /** Generador de valores aleatorios para el registro masivo. */
+    private Random random;
+
+    /** Formato de hora utilizado para los timestamps. */
+    private static final DateTimeFormatter FORMATO_HORA =
+            DateTimeFormatter.ofPattern("HH:mm:ss");
 
     /**
      * Crea el controlador e inicializa todas las estructuras.
@@ -49,6 +59,7 @@ public class Controller {
         booth4 = new Queue<>();
         undoStack = new Stack<>();
         history = new List<>();
+        random = new Random();
     }
 
     /**
@@ -66,25 +77,31 @@ public class Controller {
                     registrar();
                     break;
                 case 2:
-                    atender();
+                    registrarAleatorio();
                     break;
                 case 3:
-                    revertir();
+                    mostrarEstado();
                     break;
                 case 4:
-                    mostrarHistorial();
+                    atender();
                     break;
                 case 5:
+                    revertir();
+                    break;
+                case 6:
+                    mostrarHistorial();
+                    break;
+                case 0:
                     io.showMessage("Hasta luego.");
                     break;
                 default:
                     io.showMessage("Opcion no valida.");
             }
-        } while (op != 5);
+        } while (op != 0);
     }
 
     /**
-     * Lee los datos del vehiculo y lo encola en la caseta con menos vehiculos.
+     * Lee los datos del vehiculo manualmente y lo encola en la caseta mas corta.
      *
      * @throws IOException si ocurre un error de lectura
      */
@@ -92,14 +109,41 @@ public class Controller {
         String plate = io.getString("Placa: ");
         int category = io.getInt("Categoria (1-3): ");
         double toll = calcularPeaje(category);
-        Vehicle vehicle = new Vehicle(plate, category, toll);
+        String timestamp = LocalTime.now().format(FORMATO_HORA);
+        Vehicle vehicle = new Vehicle(plate, category, toll, timestamp);
         findShortestBooth().enqueue(vehicle);
         io.showMessage("Vehiculo registrado: " + vehicle);
     }
 
     /**
-     * Lee el numero de caseta, desencola el vehiculo del frente y lo registra.
-     * El vehiculo atendido queda en la pila de deshacer y en el historial.
+     * Genera N vehiculos con placa y categoria aleatorias y los distribuye
+     * automaticamente entre las casetas segun la carga actual.
+     *
+     * @throws IOException si ocurre un error de lectura
+     */
+    private void registrarAleatorio() throws IOException {
+        int n = io.getInt("Ingrese la cantidad de vehiculos: ");
+        LocalTime tiempo = LocalTime.now();
+        for (int i = 0; i < n; i++) {
+            Vehicle vehicle = generarVehiculo(tiempo.format(FORMATO_HORA));
+            findShortestBooth().enqueue(vehicle);
+            io.showMessage("Vehiculo registrado: " + vehicle);
+            tiempo = tiempo.plusMinutes(1 + random.nextInt(5));
+        }
+    }
+
+    /**
+     * Muestra el estado actual de todas las casetas, pila y historial.
+     */
+    private void mostrarEstado() {
+        io.showState(booth1.getSize(), booth2.getSize(),
+                booth3.getSize(), booth4.getSize(),
+                undoStack.getSize(), history.getSize());
+    }
+
+    /**
+     * Atiende todos los vehiculos de la caseta seleccionada en orden FIFO.
+     * Cada vehiculo atendido se apila en undoStack y se agrega al historial.
      *
      * @throws IOException si ocurre un error de lectura
      */
@@ -114,14 +158,17 @@ public class Controller {
             io.showMessage("La caseta " + boothNum + " esta vacia.");
             return;
         }
-        Vehicle vehicle = booth.dequeue();
-        undoStack.push(vehicle);
-        history.add(vehicle);
-        io.showMessage("Atendido: " + vehicle);
+        io.showMessage("=== Atendiendo caseta " + boothNum + " ===");
+        while (!booth.isEmpty()) {
+            Vehicle vehicle = booth.dequeue();
+            undoStack.push(vehicle);
+            history.add(vehicle);
+            io.showMessage("  Atendido: " + vehicle);
+        }
     }
 
     /**
-     * Revierte la ultima atencion sacando el vehiculo de la pila de deshacer.
+     * Revierte la ultima atencion sacando el vehiculo de la cima de la pila.
      */
     private void revertir() {
         if (undoStack.isEmpty()) {
@@ -158,7 +205,7 @@ public class Controller {
      * Retorna la caseta correspondiente al numero indicado.
      *
      * @param number numero de caseta (1-4)
-     * @return caseta o {@code null} si el numero es invalido
+     * @return caseta, o {@code null} si el numero es invalido
      */
     private Queue<Vehicle> boothByNumber(int number) {
         switch (number) {
@@ -171,15 +218,37 @@ public class Controller {
     }
 
     /**
+     * Genera un vehiculo aleatorio con placa (formato LLL000), categoria (1-3)
+     * y peaje calculado segun la tarifa vigente.
+     *
+     * @param timestamp hora de llegada del vehiculo
+     * @return vehiculo generado
+     */
+    private Vehicle generarVehiculo(String timestamp) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            sb.append((char) ('A' + random.nextInt(26)));
+        }
+        for (int i = 0; i < 3; i++) {
+            sb.append(random.nextInt(10));
+        }
+        String plate = sb.toString();
+        int category = random.nextInt(3) + 1;
+        double toll = calcularPeaje(category);
+        return new Vehicle(plate, category, toll, timestamp);
+    }
+
+    /**
      * Calcula el valor del peaje segun la categoria del vehiculo.
+     * Tarifas del Peaje T Tolima - La Linea (Tolima).
      *
      * @param category categoria del vehiculo (1, 2 o 3)
      * @return valor del peaje
      */
     private double calcularPeaje(int category) {
-        if (category == 1) return 10000;
-        if (category == 2) return 15000;
-        if (category == 3) return 20000;
+        if (category == 1) return 13000;
+        if (category == 2) return 14600;
+        if (category == 3) return 29800;
         return 0;
     }
 }
