@@ -134,26 +134,43 @@ public class Controller {
             return;
         }
 
-        double[] totalPorCaseta  = new double[4];
-        int[]    vehicPorCaseta  = new int[4];
-        double[] totalPorCat     = new double[3];
-        int[]    vehicPorCat     = new int[3];
-        double   totalDia        = 0;
+        // Totales por caseta — variables nombradas, sin arreglos
+        double totalCaseta1 = 0, totalCaseta2 = 0, totalCaseta3 = 0, totalCaseta4 = 0;
+        int    vehicCaseta1 = 0, vehicCaseta2 = 0, vehicCaseta3 = 0, vehicCaseta4 = 0;
+
+        // Totales por categoria
+        double totalCat1 = 0, totalCat2 = 0, totalCat3 = 0;
+        int    vehicCat1 = 0, vehicCat2 = 0, vehicCat3 = 0;
+
+        double totalDia = 0;
 
         for (int i = 0; i < history.getSize(); i++) {
-            Vehicle v       = history.get(i);
-            int casetaIdx   = v.getBooth() - 1;   // 1..4 -> 0..3
-            int catIdx      = v.getCategory() - 1; // 1..3 -> 0..2
+            Vehicle v = history.get(i);
+            double tarifa = v.getToll();
 
-            totalPorCaseta[casetaIdx] += v.getToll();
-            vehicPorCaseta[casetaIdx]++;
-            totalPorCat[catIdx]       += v.getToll();
-            vehicPorCat[catIdx]++;
-            totalDia                  += v.getToll();
+            // Acumular por caseta
+            if (v.getBooth() == 1)      { totalCaseta1 += tarifa; vehicCaseta1++; }
+            else if (v.getBooth() == 2) { totalCaseta2 += tarifa; vehicCaseta2++; }
+            else if (v.getBooth() == 3) { totalCaseta3 += tarifa; vehicCaseta3++; }
+            else if (v.getBooth() == 4) { totalCaseta4 += tarifa; vehicCaseta4++; }
+
+            // Acumular por categoria
+            if (v.getCategory() == 1)      { totalCat1 += tarifa; vehicCat1++; }
+            else if (v.getCategory() == 2) { totalCat2 += tarifa; vehicCat2++; }
+            else if (v.getCategory() == 3) { totalCat3 += tarifa; vehicCat3++; }
+
+            totalDia += tarifa;
         }
 
-        io.showDayReport(currentDay, totalPorCaseta, vehicPorCaseta,
-                         totalPorCat, vehicPorCat, totalDia);
+        io.showDayReport(currentDay,
+                totalCaseta1, vehicCaseta1,
+                totalCaseta2, vehicCaseta2,
+                totalCaseta3, vehicCaseta3,
+                totalCaseta4, vehicCaseta4,
+                totalCat1, vehicCat1,
+                totalCat2, vehicCat2,
+                totalCat3, vehicCat3,
+                totalDia);
     }
 
     // =========================================================
