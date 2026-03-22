@@ -2,7 +2,8 @@ package peajeinteligente.model;
 
 /**
  * Representa un vehiculo que pasa por el peaje.
- * Almacena la placa, la categoria, el valor del peaje y la hora de ingreso.
+ * Almacena la placa, la categoria, el valor del peaje, la hora de ingreso
+ * y la caseta por la que fue atendido.
  */
 public class Vehicle {
 
@@ -18,10 +19,11 @@ public class Vehicle {
     /** Hora de ingreso al peaje en formato HH:mm:ss. */
     private String timestamp;
 
+    /** Numero de caseta por la que fue atendido (1-4). Asignado en atencion. */
+    private int booth;
+
     /**
      * Crea un vehiculo con todos sus datos, incluida la hora de ingreso.
-     * El timestamp es responsabilidad del llamador para permitir
-     * tiempos reales (registro manual) o simulados (registro masivo).
      *
      * @param plate     placa del vehiculo
      * @param category  categoria del vehiculo
@@ -29,53 +31,26 @@ public class Vehicle {
      * @param timestamp hora de ingreso en formato HH:mm:ss
      */
     public Vehicle(String plate, int category, double toll, String timestamp) {
-        this.plate = plate;
-        this.category = category;
-        this.toll = toll;
+        this.plate     = plate;
+        this.category  = category;
+        this.toll      = toll;
         this.timestamp = timestamp;
+        this.booth     = 0;
     }
 
-    /**
-     * Retorna la placa del vehiculo.
-     *
-     * @return placa
-     */
-    public String getPlate() {
-        return plate;
-    }
+    public String getPlate()     { return plate; }
+    public int    getCategory()  { return category; }
+    public double getToll()      { return toll; }
+    public String getTimestamp() { return timestamp; }
+    public int    getBooth()     { return booth; }
 
     /**
-     * Retorna la categoria del vehiculo.
+     * Asigna la caseta por la que fue atendido el vehiculo.
      *
-     * @return categoria
+     * @param booth numero de caseta (1-4)
      */
-    public int getCategory() {
-        return category;
-    }
+    public void setBooth(int booth) { this.booth = booth; }
 
-    /**
-     * Retorna el valor del peaje.
-     *
-     * @return valor del peaje
-     */
-    public double getToll() {
-        return toll;
-    }
-
-    /**
-     * Retorna la hora de ingreso al peaje.
-     *
-     * @return timestamp en formato HH:mm:ss
-     */
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    /**
-     * Representacion legible del vehiculo para mostrar en consola.
-     *
-     * @return cadena con placa, categoria, peaje y hora
-     */
     @Override
     public String toString() {
         return plate + " Cat:" + category + " $" + (int) toll + " [" + timestamp + "]";
