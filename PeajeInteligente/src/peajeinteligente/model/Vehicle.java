@@ -2,8 +2,9 @@ package peajeinteligente.model;
 
 /**
  * Representa un vehiculo que pasa por el peaje.
- * Almacena la placa, la categoria, el valor del peaje, la hora de ingreso
- * y la caseta por la que fue atendido.
+ * Almacena la placa, la categoria, el valor del peaje y la hora de ingreso.
+ * El vehiculo no conoce por cual caseta fue atendido; esa responsabilidad
+ * pertenece al Controller mediante listas separadas por caseta.
  */
 public class Vehicle {
 
@@ -19,14 +20,11 @@ public class Vehicle {
     /** Hora de ingreso al peaje en formato HH:mm:ss. */
     private String timestamp;
 
-    /** Numero de caseta por la que fue atendido (1-4). Asignado en atencion. */
-    private int booth;
-
     /**
-     * Crea un vehiculo con todos sus datos, incluida la hora de ingreso.
+     * Crea un vehiculo con todos sus datos.
      *
      * @param plate     placa del vehiculo
-     * @param category  categoria del vehiculo
+     * @param category  categoria del vehiculo (1, 2 o 3)
      * @param toll      valor del peaje
      * @param timestamp hora de ingreso en formato HH:mm:ss
      */
@@ -35,21 +33,12 @@ public class Vehicle {
         this.category  = category;
         this.toll      = toll;
         this.timestamp = timestamp;
-        this.booth     = 0;
     }
 
     public String getPlate()     { return plate; }
     public int    getCategory()  { return category; }
     public double getToll()      { return toll; }
     public String getTimestamp() { return timestamp; }
-    public int    getBooth()     { return booth; }
-
-    /**
-     * Asigna la caseta por la que fue atendido el vehiculo.
-     *
-     * @param booth numero de caseta (1-4)
-     */
-    public void setBooth(int booth) { this.booth = booth; }
 
     @Override
     public String toString() {
