@@ -163,6 +163,10 @@ PeajeInteligente/
 └── README.md
 ```
 
+## Posibles mejoras
+
+Una mejora natural sería encapsular cada caseta en una clase `Caseta` que agrupe internamente su cola de vehiculos en espera (`Queue<Vehicle>`), su historial diario (`List<Vehicle>`) y su pila de deshacer (`Stack<Vehicle>`). Con ese diseño, revertir operaria sobre la caseta específica y no sobre una pila global compartida entre todas, lo que refleja mejor la realidad: el error de registro ocurre en una caseta concreta. El `Controller` pasaría de manejar ocho estructuras separadas a mantener cuatro objetos `Caseta`, simplificando `atender()`, `revertir()`, `reporteRecaudoDia()` y `cerrarDia()`.
+
 ## How to Run
 
 ```bash
