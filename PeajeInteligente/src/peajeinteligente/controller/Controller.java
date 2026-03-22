@@ -32,6 +32,13 @@ public class Controller {
     /** Pila de deshacer: permite revertir la ultima atencion. */
     private Stack<Vehicle> undoStack;
 
+    /**
+     * Pila paralela al undoStack: registra el numero de caseta (1-4)
+     * de cada vehiculo apilado, para saber de cual histCaseta removerlo
+     * al revertir.
+     */
+    private Stack<Integer> undoBooth;
+
     // --- Paso 2: cuatro listas diarias, una por caseta ---
     private List<Vehicle> histCaseta1;
     private List<Vehicle> histCaseta2;
@@ -65,6 +72,7 @@ public class Controller {
         booth3     = new Queue<>();
         booth4     = new Queue<>();
         undoStack  = new Stack<>();
+        undoBooth  = new Stack<>();
         histCaseta1 = new List<>();
         histCaseta2 = new List<>();
         histCaseta3 = new List<>();
@@ -227,11 +235,16 @@ public class Controller {
             currentDay++;
         }
 
+        booth1      = new Queue<>();
+        booth2      = new Queue<>();
+        booth3      = new Queue<>();
+        booth4      = new Queue<>();
         histCaseta1 = new List<>();
         histCaseta2 = new List<>();
         histCaseta3 = new List<>();
         histCaseta4 = new List<>();
         undoStack   = new Stack<>();
+        undoBooth   = new Stack<>();
         io.showMessage("Sistema listo para el dia " + currentDay + ".");
     }
 
@@ -346,7 +359,8 @@ public class Controller {
         while (!booth.isEmpty()) {
             Vehicle vehicle = booth.dequeue();
             undoStack.push(vehicle);
-            histDia.add(vehicle);          // va directo a la lista de su caseta
+            undoBooth.push(boothNum);
+            histDia.add(vehicle);
             io.showMessage("  Atendido: " + vehicle);
         }
     }
@@ -357,6 +371,8 @@ public class Controller {
             return;
         }
         Vehicle vehicle = undoStack.pop();
+        int boothNum    = undoBooth.pop();
+        histByNumber(boothNum).removeLast();
         io.showMessage("Revertido: " + vehicle);
     }
 

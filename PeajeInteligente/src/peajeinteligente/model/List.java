@@ -52,6 +52,31 @@ public class List<T> {
     }
 
     /**
+     * Elimina y retorna el ultimo elemento de la lista.
+     * Usado por el Controller para revertir el ultimo vehiculo agregado
+     * a un historial de caseta sin necesidad de conocer su posicion.
+     *
+     * @return ultimo elemento, o {@code null} si la lista esta vacia
+     */
+    public T removeLast() {
+        if (head == null) return null;
+        if (head.getNext() == null) {
+            T data = head.getData();
+            head = null;
+            size--;
+            return data;
+        }
+        Node<T> aux = head;
+        while (aux.getNext().getNext() != null) {
+            aux = aux.getNext();
+        }
+        T data = aux.getNext().getData();
+        aux.setNext(null);
+        size--;
+        return data;
+    }
+
+    /**
      * Retorna la cantidad de elementos en la lista.
      *
      * @return tamano de la lista
