@@ -14,9 +14,9 @@ import java.util.Random;
 
 /**
  * Controlador principal del sistema de peaje.
- * Coordina las operaciones de registro, atencion, reversion, historial,
- * reporte de recaudo, arqueo de caja y reporte semanal del supervisor.
- * Contiene el bucle de menu y todos los switch de despacho.
+ * Mantiene cuatro listas diarias separadas (una por caseta). El vehiculo
+ * no sabe por cual caseta paso; el Controller organiza esa informacion
+ * con listas independientes, eliminando la necesidad de filtrar.
  */
 public class Controller {
 
@@ -32,14 +32,15 @@ public class Controller {
     /** Pila de deshacer: permite revertir la ultima atencion. */
     private Stack<Vehicle> undoStack;
 
-    /** Historial cronologico de vehiculos atendidos en el dia actual. */
-    private List<Vehicle> history;
+    // --- Paso 2: cuatro listas diarias, una por caseta ---
+    private List<Vehicle> histCaseta1;
+    private List<Vehicle> histCaseta2;
+    private List<Vehicle> histCaseta3;
+    private List<Vehicle> histCaseta4;
 
     /**
      * Semana actual: lista de DailyRecord cerrados.
-     * Cada elemento es un registro diario de una caseta.
-     * Se acumulan al hacer arqueo de caja (cerrar dia).
-     * Maximo 28 registros por semana (4 casetas x 7 dias).
+     * Maximo 28 registros (4 casetas x 7 dias).
      */
     private List<DailyRecord> week;
 
@@ -58,16 +59,19 @@ public class Controller {
      * @param io gestor de entrada/salida
      */
     public Controller(IOManager io) {
-        this.io = io;
-        booth1    = new Queue<>();
-        booth2    = new Queue<>();
-        booth3    = new Queue<>();
-        booth4    = new Queue<>();
-        undoStack = new Stack<>();
-        history   = new List<>();
-        week      = new List<>();
+        this.io    = io;
+        booth1     = new Queue<>();
+        booth2     = new Queue<>();
+        booth3     = new Queue<>();
+        booth4     = new Queue<>();
+        undoStack  = new Stack<>();
+        histCaseta1 = new List<>();
+        histCaseta2 = new List<>();
+        histCaseta3 = new List<>();
+        histCaseta4 = new List<>();
+        week       = new List<>();
         currentDay = 1;
-        random    = new Random();
+        random     = new Random();
     }
 
     /**
@@ -80,13 +84,13 @@ public class Controller {
         do {
             op = io.showMenu();
             switch (op) {
-                case 1: registrar();        break;
+                case 1: registrar();          break;
                 case 2: registrarAleatorio(); break;
-                case 3: mostrarEstado();    break;
-                case 4: atender();          break;
-                case 5: revertir();         break;
-                case 6: mostrarHistorial(); break;
-                case 7: menuReportes();     break;
+                case 3: mostrarEstado();      break;
+                case 4: atender();            break;
+                case 5: revertir();           break;
+                case 6: mostrarHistorial();   break;
+                case 7: menuReportes();       break;
                 case 0: io.showMessage("Hasta luego."); break;
                 default: io.showMessage("Opcion no valida.");
             }
@@ -94,14 +98,11 @@ public class Controller {
     }
 
     // =========================================================
-    // MENU DE REPORTES (opcion 7) — submenus
+    // MENU DE REPORTES (opcion 7)
     // =========================================================
 
     /**
-     * Submenú de reportes. Muestra tres opciones:
-     * 1. Reporte de recaudo del dia.
-     * 2. Cerrar dia (arqueo de caja).
-     * 3. Reporte semanal del supervisor.
+     * Submenú de reportes con su propio do-while y switch.
      *
      * @throws IOException si ocurre un error de lectura
      */
@@ -110,9 +111,9 @@ public class Controller {
         do {
             op = io.showReportMenu(currentDay);
             switch (op) {
-                case 1: reporteRecaudoDia();   break;
-                case 2: cerrarDia();           break;
-                case 3: reporteSemanal();      break;
+                case 1: reporteRecaudoDia(); break;
+                case 2: cerrarDia();         break;
+                case 3: reporteSemanal();    break;
                 case 0: break;
                 default: io.showMessage("Opcion no valida.");
             }
@@ -125,41 +126,57 @@ public class Controller {
 
     /**
      * Genera el reporte de recaudo del dia actual.
-     * Recorre el historial UNA sola vez acumulando totales por caseta
-     * y por categoria. No destruye ninguna estructura.
+     * Paso 4: itera cada lista por separado y acumula con variables
+     * nombradas — sin arrays, sin filtrar por booth.
      */
     private void reporteRecaudoDia() {
-        if (history.getSize() == 0) {
+        int total = histCaseta1.getSize() + histCaseta2.getSize()
+                  + histCaseta3.getSize() + histCaseta4.getSize();
+        if (total == 0) {
             io.showMessage("No hay vehiculos atendidos en el dia actual.");
             return;
         }
 
-        // Totales por caseta — variables nombradas, sin arreglos
-        double totalCaseta1 = 0, totalCaseta2 = 0, totalCaseta3 = 0, totalCaseta4 = 0;
-        int    vehicCaseta1 = 0, vehicCaseta2 = 0, vehicCaseta3 = 0, vehicCaseta4 = 0;
+        double totalCaseta1 = 0; int vehicCaseta1 = 0;
+        double totalCaseta2 = 0; int vehicCaseta2 = 0;
+        double totalCaseta3 = 0; int vehicCaseta3 = 0;
+        double totalCaseta4 = 0; int vehicCaseta4 = 0;
+        double totalCat1 = 0;   int vehicCat1 = 0;
+        double totalCat2 = 0;   int vehicCat2 = 0;
+        double totalCat3 = 0;   int vehicCat3 = 0;
+        double totalDia  = 0;
 
-        // Totales por categoria
-        double totalCat1 = 0, totalCat2 = 0, totalCat3 = 0;
-        int    vehicCat1 = 0, vehicCat2 = 0, vehicCat3 = 0;
-
-        double totalDia = 0;
-
-        for (int i = 0; i < history.getSize(); i++) {
-            Vehicle v = history.get(i);
-            double tarifa = v.getToll();
-
-            // Acumular por caseta
-            if (v.getBooth() == 1)      { totalCaseta1 += tarifa; vehicCaseta1++; }
-            else if (v.getBooth() == 2) { totalCaseta2 += tarifa; vehicCaseta2++; }
-            else if (v.getBooth() == 3) { totalCaseta3 += tarifa; vehicCaseta3++; }
-            else if (v.getBooth() == 4) { totalCaseta4 += tarifa; vehicCaseta4++; }
-
-            // Acumular por categoria
-            if (v.getCategory() == 1)      { totalCat1 += tarifa; vehicCat1++; }
-            else if (v.getCategory() == 2) { totalCat2 += tarifa; vehicCat2++; }
-            else if (v.getCategory() == 3) { totalCat3 += tarifa; vehicCat3++; }
-
-            totalDia += tarifa;
+        for (int i = 0; i < histCaseta1.getSize(); i++) {
+            Vehicle v = histCaseta1.get(i);
+            totalCaseta1 += v.getToll(); vehicCaseta1++;
+            totalDia     += v.getToll();
+            if      (v.getCategory() == 1) { totalCat1 += v.getToll(); vehicCat1++; }
+            else if (v.getCategory() == 2) { totalCat2 += v.getToll(); vehicCat2++; }
+            else if (v.getCategory() == 3) { totalCat3 += v.getToll(); vehicCat3++; }
+        }
+        for (int i = 0; i < histCaseta2.getSize(); i++) {
+            Vehicle v = histCaseta2.get(i);
+            totalCaseta2 += v.getToll(); vehicCaseta2++;
+            totalDia     += v.getToll();
+            if      (v.getCategory() == 1) { totalCat1 += v.getToll(); vehicCat1++; }
+            else if (v.getCategory() == 2) { totalCat2 += v.getToll(); vehicCat2++; }
+            else if (v.getCategory() == 3) { totalCat3 += v.getToll(); vehicCat3++; }
+        }
+        for (int i = 0; i < histCaseta3.getSize(); i++) {
+            Vehicle v = histCaseta3.get(i);
+            totalCaseta3 += v.getToll(); vehicCaseta3++;
+            totalDia     += v.getToll();
+            if      (v.getCategory() == 1) { totalCat1 += v.getToll(); vehicCat1++; }
+            else if (v.getCategory() == 2) { totalCat2 += v.getToll(); vehicCat2++; }
+            else if (v.getCategory() == 3) { totalCat3 += v.getToll(); vehicCat3++; }
+        }
+        for (int i = 0; i < histCaseta4.getSize(); i++) {
+            Vehicle v = histCaseta4.get(i);
+            totalCaseta4 += v.getToll(); vehicCaseta4++;
+            totalDia     += v.getToll();
+            if      (v.getCategory() == 1) { totalCat1 += v.getToll(); vehicCat1++; }
+            else if (v.getCategory() == 2) { totalCat2 += v.getToll(); vehicCat2++; }
+            else if (v.getCategory() == 3) { totalCat3 += v.getToll(); vehicCat3++; }
         }
 
         io.showDayReport(currentDay,
@@ -178,35 +195,23 @@ public class Controller {
     // =========================================================
 
     /**
-     * Cierra el dia actual: crea un DailyRecord por cada caseta con los
-     * vehiculos del historial que le corresponden, los guarda en la semana
-     * y limpia las estructuras del dia para el siguiente.
-     * Si ya se cerraron 7 dias, reinicia la semana.
+     * Cierra el dia actual.
+     * Paso 5: cada DailyRecord se construye directamente desde su lista,
+     * sin filtrar por caseta.
      */
     private void cerrarDia() {
-        if (history.getSize() == 0) {
+        int total = histCaseta1.getSize() + histCaseta2.getSize()
+                  + histCaseta3.getSize() + histCaseta4.getSize();
+        if (total == 0) {
             io.showMessage("No hay vehiculos atendidos. No se puede cerrar el dia.");
             return;
         }
 
-        // Crear un DailyRecord por caseta
-        DailyRecord rec1 = new DailyRecord(1, currentDay);
-        DailyRecord rec2 = new DailyRecord(2, currentDay);
-        DailyRecord rec3 = new DailyRecord(3, currentDay);
-        DailyRecord rec4 = new DailyRecord(4, currentDay);
+        DailyRecord rec1 = buildRecord(1, currentDay, histCaseta1);
+        DailyRecord rec2 = buildRecord(2, currentDay, histCaseta2);
+        DailyRecord rec3 = buildRecord(3, currentDay, histCaseta3);
+        DailyRecord rec4 = buildRecord(4, currentDay, histCaseta4);
 
-        // Distribuir historial en los registros segun caseta
-        for (int i = 0; i < history.getSize(); i++) {
-            Vehicle v = history.get(i);
-            switch (v.getBooth()) {
-                case 1: rec1.addVehicle(v); break;
-                case 2: rec2.addVehicle(v); break;
-                case 3: rec3.addVehicle(v); break;
-                case 4: rec4.addVehicle(v); break;
-            }
-        }
-
-        // Guardar en la semana solo los registros con vehiculos
         if (rec1.getVehicleCount() > 0) week.add(rec1);
         if (rec2.getVehicleCount() > 0) week.add(rec2);
         if (rec3.getVehicleCount() > 0) week.add(rec3);
@@ -214,19 +219,37 @@ public class Controller {
 
         io.showMessage("Arqueo de caja completado. Dia " + currentDay + " cerrado.");
 
-        // Avanzar dia o reiniciar semana
         if (currentDay >= 7) {
             io.showMessage("Semana completa. Reiniciando semana...");
-            week      = new List<>();
+            week       = new List<>();
             currentDay = 1;
         } else {
             currentDay++;
         }
 
-        // Limpiar estructuras del dia
-        history   = new List<>();
-        undoStack = new Stack<>();
+        histCaseta1 = new List<>();
+        histCaseta2 = new List<>();
+        histCaseta3 = new List<>();
+        histCaseta4 = new List<>();
+        undoStack   = new Stack<>();
         io.showMessage("Sistema listo para el dia " + currentDay + ".");
+    }
+
+    /**
+     * Crea un DailyRecord para la caseta y dia indicados, poblado con
+     * los vehiculos de la lista correspondiente.
+     *
+     * @param boothNum numero de caseta
+     * @param day      numero de dia
+     * @param hist     lista de vehiculos de esa caseta
+     * @return DailyRecord listo para guardar en la semana
+     */
+    private DailyRecord buildRecord(int boothNum, int day, List<Vehicle> hist) {
+        DailyRecord rec = new DailyRecord(boothNum, day);
+        for (int i = 0; i < hist.getSize(); i++) {
+            rec.addVehicle(hist.get(i));
+        }
+        return rec;
     }
 
     // =========================================================
@@ -235,13 +258,9 @@ public class Controller {
 
     /**
      * Muestra el reporte semanal del supervisor.
-     * Por cada caseta, muestra sus DailyRecord de la semana.
-     * Dentro de cada dia, vacia la pila de vehiculos mostrando
-     * del ultimo al primero (LIFO), calcula total por dia y total semanal.
-     *
-     * NOTA: Este reporte consume las pilas de vehiculos de cada DailyRecord.
-     * Esto es correcto segun el enunciado: el supervisor "revisa" la operacion,
-     * y el uso correcto de las estructuras exige borrar los nodos al acceder.
+     * Paso 6: sin continue ni boolean tieneDatos — cada DailyRecord
+     * ya pertenece a una caseta especifica, no hay que filtrar.
+     * La pila se vacia con pop() mostrando del ultimo al primero (LIFO).
      */
     private void reporteSemanal() {
         if (week.getSize() == 0) {
@@ -251,46 +270,20 @@ public class Controller {
 
         io.showWeeklyReportHeader(currentDay - 1);
 
-        // Recorrer las 4 casetas
-        for (int boothNum = 1; boothNum <= 4; boothNum++) {
-            double totalSemanalCaseta = 0;
-            boolean tieneDatos = false;
+        for (int i = 0; i < week.getSize(); i++) {
+            DailyRecord rec = week.get(i);
 
-            io.showBoothWeeklyHeader(boothNum);
+            io.showBoothWeeklyHeader(rec.getBoothNumber(), rec.getDayNumber(),
+                    rec.getVehicleCount());
 
-            // Buscar todos los DailyRecord de esta caseta en la semana
-            for (int i = 0; i < week.getSize(); i++) {
-                DailyRecord rec = week.get(i);
-                if (rec.getBoothNumber() != boothNum) continue;
-
-                tieneDatos = true;
-                double totalDia = 0;
-                int countDia    = rec.getVehicleCount();
-
-                io.showMessage("  --- Dia " + rec.getDayNumber()
-                        + " (" + countDia + " vehiculo(s)) ---");
-
-                // Vaciar la pila: muestra del ultimo al primero (LIFO)
-                Stack<Vehicle> pila = rec.getVehicles();
-                while (!pila.isEmpty()) {
-                    Vehicle v = pila.pop();
-                    totalDia += v.getToll();
-                    io.showMessage("    " + v);
-                }
-
-                io.showMessage("  Total dia " + rec.getDayNumber()
-                        + ": $ " + (long) rec.getTotal());
-                totalSemanalCaseta += rec.getTotal();
+            Stack<Vehicle> pila = rec.getVehicles();
+            while (!pila.isEmpty()) {
+                io.showMessage("    " + pila.pop());
             }
 
-            if (!tieneDatos) {
-                io.showMessage("  Sin operaciones registradas.");
-            } else {
-                io.showBoothWeeklyTotal(boothNum, totalSemanalCaseta);
-            }
+            io.showBoothWeeklyTotal(rec.getBoothNumber(), rec.getTotal());
         }
 
-        // Gran total semanal
         double granTotal = 0;
         for (int i = 0; i < week.getSize(); i++) {
             granTotal += week.get(i).getTotal();
@@ -299,15 +292,15 @@ public class Controller {
     }
 
     // =========================================================
-    // OPERACIONES BASICAS (sin cambios de logica)
+    // OPERACIONES BASICAS
     // =========================================================
 
     private void registrar() throws IOException {
-        String plate    = io.getString("Placa: ");
-        int category    = io.getInt("Categoria (1-3): ");
-        double toll     = calcularPeaje(category);
+        String plate     = io.getString("Placa: ");
+        int category     = io.getInt("Categoria (1-3): ");
+        double toll      = calcularPeaje(category);
         String timestamp = LocalTime.now().format(FORMATO_HORA);
-        Vehicle vehicle = new Vehicle(plate, category, toll, timestamp);
+        Vehicle vehicle  = new Vehicle(plate, category, toll, timestamp);
         findShortestBooth().enqueue(vehicle);
         io.showMessage("Vehiculo registrado: " + vehicle);
     }
@@ -324,49 +317,65 @@ public class Controller {
     }
 
     private void mostrarEstado() {
+        int histTotal = histCaseta1.getSize() + histCaseta2.getSize()
+                      + histCaseta3.getSize() + histCaseta4.getSize();
         io.showState(booth1.getSize(), booth2.getSize(),
                 booth3.getSize(), booth4.getSize(),
-                undoStack.getSize(), history.getSize());
+                undoStack.getSize(), histTotal);
     }
 
     /**
      * Atiende todos los vehiculos de la caseta seleccionada en orden FIFO.
-     * Asigna el numero de caseta al vehiculo, lo apila en undoStack
-     * y lo agrega al historial del dia.
+     * Paso 3: cada vehiculo se agrega directamente a la lista de su caseta.
+     * No se asigna ningun campo booth al vehiculo.
+     *
+     * @throws IOException si ocurre un error de lectura
      */
     private void atender() throws IOException {
         int boothNum = io.getInt("Caseta (1-4): ");
-        Queue<Vehicle> booth = boothByNumber(boothNum);
+        Queue<Vehicle> booth   = boothByNumber(boothNum);
+        List<Vehicle>  histDia = histByNumber(boothNum);
+
         if (booth == null) { io.showMessage("Caseta invalida."); return; }
-        if (booth.isEmpty()) { io.showMessage("La caseta " + boothNum + " esta vacia."); return; }
+        if (booth.isEmpty()) {
+            io.showMessage("La caseta " + boothNum + " esta vacia.");
+            return;
+        }
 
         io.showMessage("=== Atendiendo caseta " + boothNum + " ===");
         while (!booth.isEmpty()) {
             Vehicle vehicle = booth.dequeue();
-            vehicle.setBooth(boothNum);
             undoStack.push(vehicle);
-            history.add(vehicle);
+            histDia.add(vehicle);          // va directo a la lista de su caseta
             io.showMessage("  Atendido: " + vehicle);
         }
     }
 
     private void revertir() {
-        if (undoStack.isEmpty()) { io.showMessage("No hay operaciones para revertir."); return; }
+        if (undoStack.isEmpty()) {
+            io.showMessage("No hay operaciones para revertir.");
+            return;
+        }
         Vehicle vehicle = undoStack.pop();
         io.showMessage("Revertido: " + vehicle);
     }
 
     /**
-     * Muestra el historial del dia usando get(i) — sin imprimir desde el modelo.
+     * Muestra el historial del dia por caseta.
      */
     private void mostrarHistorial() {
         io.showMessage("=== Historial dia " + currentDay + " ===");
-        if (history.getSize() == 0) {
-            io.showMessage("  (vacio)");
-            return;
-        }
-        for (int i = 0; i < history.getSize(); i++) {
-            io.showMessage("  " + history.get(i));
+        mostrarListaCaseta(1, histCaseta1);
+        mostrarListaCaseta(2, histCaseta2);
+        mostrarListaCaseta(3, histCaseta3);
+        mostrarListaCaseta(4, histCaseta4);
+    }
+
+    private void mostrarListaCaseta(int num, List<Vehicle> hist) {
+        if (hist.getSize() == 0) return;
+        io.showMessage("  -- Caseta " + num + " --");
+        for (int i = 0; i < hist.getSize(); i++) {
+            io.showMessage("    " + hist.get(i));
         }
     }
 
@@ -392,6 +401,16 @@ public class Controller {
         }
     }
 
+    private List<Vehicle> histByNumber(int number) {
+        switch (number) {
+            case 1: return histCaseta1;
+            case 2: return histCaseta2;
+            case 3: return histCaseta3;
+            case 4: return histCaseta4;
+            default: return null;
+        }
+    }
+
     private Vehicle generarVehiculo(String timestamp) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 3; i++) sb.append((char)('A' + random.nextInt(26)));
@@ -400,9 +419,7 @@ public class Controller {
         return new Vehicle(sb.toString(), category, calcularPeaje(category), timestamp);
     }
 
-    /**
-     * Tarifas del Peaje T Tolima - La Linea (Tolima) 2026.
-     */
+    /** Tarifas del Peaje La Linea (Tolima) 2026. */
     private double calcularPeaje(int category) {
         if (category == 1) return 13000;
         if (category == 2) return 14600;
