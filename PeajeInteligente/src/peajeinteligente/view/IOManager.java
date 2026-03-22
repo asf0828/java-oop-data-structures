@@ -101,18 +101,16 @@ public class IOManager {
 
     /**
      * Muestra el reporte de recaudo del dia actual.
-     * Recibe los datos ya calculados desde el Controller.
-     *
-     * @param day            numero de dia actual
-     * @param totalPorCaseta monto recaudado por caseta (indice 0 = caseta 1)
-     * @param vehicPorCaseta vehiculos atendidos por caseta
-     * @param totalPorCat    monto recaudado por categoria (indice 0 = cat 1)
-     * @param vehicPorCat    vehiculos por categoria
-     * @param totalDia       gran total del dia
+     * Recibe todos los totales como parametros individuales — sin arreglos.
      */
     public void showDayReport(int day,
-                              double[] totalPorCaseta, int[] vehicPorCaseta,
-                              double[] totalPorCat,    int[] vehicPorCat,
+                              double totalCaseta1, int vehicCaseta1,
+                              double totalCaseta2, int vehicCaseta2,
+                              double totalCaseta3, int vehicCaseta3,
+                              double totalCaseta4, int vehicCaseta4,
+                              double totalCat1, int vehicCat1,
+                              double totalCat2, int vehicCat2,
+                              double totalCat3, int vehicCat3,
                               double totalDia) {
         System.out.println();
         System.out.println("============================================");
@@ -121,22 +119,16 @@ public class IOManager {
 
         System.out.println();
         System.out.println("  Por caseta:");
-        for (int i = 0; i < totalPorCaseta.length; i++) {
-            System.out.println("    Caseta " + (i + 1)
-                    + " : " + vehicPorCaseta[i] + " vehiculo(s)"
-                    + "  |  $ " + (long) totalPorCaseta[i]);
-        }
+        System.out.println("    Caseta 1 : " + vehicCaseta1 + " vehiculo(s)  |  $ " + (long) totalCaseta1);
+        System.out.println("    Caseta 2 : " + vehicCaseta2 + " vehiculo(s)  |  $ " + (long) totalCaseta2);
+        System.out.println("    Caseta 3 : " + vehicCaseta3 + " vehiculo(s)  |  $ " + (long) totalCaseta3);
+        System.out.println("    Caseta 4 : " + vehicCaseta4 + " vehiculo(s)  |  $ " + (long) totalCaseta4);
 
         System.out.println();
         System.out.println("  Por categoria:");
-        String[] cat = {"Cat. I   (Livianos)        ",
-                        "Cat. II  (Buses/Microbuses)",
-                        "Cat. III (Camiones)        "};
-        for (int i = 0; i < totalPorCat.length; i++) {
-            System.out.println("    " + cat[i]
-                    + " : " + vehicPorCat[i] + " vehiculo(s)"
-                    + "  |  $ " + (long) totalPorCat[i]);
-        }
+        System.out.println("    Cat. I   (Livianos)         : " + vehicCat1 + " vehiculo(s)  |  $ " + (long) totalCat1);
+        System.out.println("    Cat. II  (Buses/Microbuses) : " + vehicCat2 + " vehiculo(s)  |  $ " + (long) totalCat2);
+        System.out.println("    Cat. III (Camiones)         : " + vehicCat3 + " vehiculo(s)  |  $ " + (long) totalCat3);
 
         System.out.println();
         System.out.println("============================================");
