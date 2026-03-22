@@ -169,6 +169,8 @@ A natural improvement would be to encapsulate each toll booth in a `Booth` class
 
 A second improvement relates to `IOManager.showDayReport()`, which currently receives thirteen individual parameters. Wrapping those values in a `DayReport` data class would make the method signature readable and easy to extend (e.g., adding per-category averages later) without touching the Controller or the IOManager signature again.
 
+A third improvement concerns the `Vehicle` model: a vehicle should not store the toll amount, since the toll depends on the specific toll booth it passes through, not on the vehicle itself. The vehicle only knows its category; the fare calculation belongs in the `Controller` or in a separate pricing service. This would make `Vehicle` a purer domain object and allow different toll booths to apply different rates without modifying the model.
+
 ## How to Run
 
 ```bash
@@ -176,8 +178,8 @@ A second improvement relates to `IOManager.showDayReport()`, which currently rec
 cd /path/to/PeajeInteligente
 
 # Compile the project
-~/.sdkman/candidates/java/current/bin/javac -d bin $(find src -name "*.java")
+javac -d bin $(find src -name "*.java")
 
 # Run the project
-~/.sdkman/candidates/java/current/bin/java -cp bin peajeinteligente.runner.Runner
+java -cp bin peajeinteligente.runner.Runner
 ```
