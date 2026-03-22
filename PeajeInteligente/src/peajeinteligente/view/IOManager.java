@@ -7,13 +7,17 @@ import java.io.IOException;
 /**
  * Gestiona toda la entrada y salida del programa.
  * Utiliza {@link BufferedReader} para la lectura de datos del usuario.
- * No contiene logica de negocio.
+ * No contiene logica de negocio: solo pide y muestra datos.
  */
 public class IOManager {
 
     /** Lector de entrada estandar. */
     private static final BufferedReader reader =
             new BufferedReader(new InputStreamReader(System.in));
+
+    // =========================================================
+    // MENUS
+    // =========================================================
 
     /**
      * Muestra el menu principal y retorna la opcion seleccionada.
@@ -25,69 +29,172 @@ public class IOManager {
         System.out.println();
         System.out.println("=== Peaje Inteligente ===");
         System.out.println("1. Registrar vehiculo (manual)");
-        System.out.println("2. Registrar vehiculos (automatico: placa y categoria aleatorias)");
+        System.out.println("2. Registrar vehiculos (automatico)");
         System.out.println("3. Ver estado actual");
         System.out.println("4. Atender caseta");
         System.out.println("5. Revertir ultima atencion");
-        System.out.println("6. Ver historial");
+        System.out.println("6. Ver historial del dia");
+        System.out.println("7. Reportes");
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
         return Integer.parseInt(reader.readLine().trim());
     }
 
     /**
-     * Lee una cadena de texto con el mensaje indicado como prompt.
+     * Muestra el submenu de reportes y retorna la opcion seleccionada.
      *
-     * @param prompt mensaje a mostrar antes de leer
-     * @return texto ingresado por el usuario
+     * @param currentDay numero del dia actual
+     * @return numero de opcion elegida
      * @throws IOException si ocurre un error de lectura
      */
+    public int showReportMenu(int currentDay) throws IOException {
+        System.out.println();
+        System.out.println("=== Reportes  [Dia actual: " + currentDay + "] ===");
+        System.out.println("1. Reporte de recaudo del dia actual");
+        System.out.println("2. Cerrar dia (arqueo de caja)");
+        System.out.println("3. Reporte semanal del supervisor");
+        System.out.println("0. Volver");
+        System.out.print("Opcion: ");
+        return Integer.parseInt(reader.readLine().trim());
+    }
+
+    // =========================================================
+    // ENTRADA
+    // =========================================================
+
     public String getString(String prompt) throws IOException {
         System.out.print(prompt);
         return reader.readLine().trim();
     }
 
-    /**
-     * Lee un numero entero con el mensaje indicado como prompt.
-     *
-     * @param prompt mensaje a mostrar antes de leer
-     * @return entero ingresado por el usuario
-     * @throws IOException si ocurre un error de lectura
-     */
     public int getInt(String prompt) throws IOException {
         System.out.print(prompt);
         return Integer.parseInt(reader.readLine().trim());
     }
 
-    /**
-     * Muestra un mensaje por consola.
-     *
-     * @param message mensaje a mostrar
-     */
+    // =========================================================
+    // SALIDA GENERAL
+    // =========================================================
+
     public void showMessage(String message) {
         System.out.println(message);
     }
 
     /**
-     * Muestra el estado actual de las 4 casetas, la pila de deshacer y el historial.
-     * Solo muestra cantidades — no accede al contenido de las estructuras.
-     *
-     * @param size1       vehiculos en caseta 1
-     * @param size2       vehiculos en caseta 2
-     * @param size3       vehiculos en caseta 3
-     * @param size4       vehiculos en caseta 4
-     * @param undoSize    operaciones reversibles en la pila
-     * @param historySize vehiculos registrados en el historial
+     * Muestra el estado actual de casetas, pila y historial.
      */
     public void showState(int size1, int size2, int size3, int size4,
                           int undoSize, int historySize) {
         System.out.println();
         System.out.println("=== Estado actual ===");
-        System.out.println("Caseta 1: " + size1 + " vehiculo(s)");
-        System.out.println("Caseta 2: " + size2 + " vehiculo(s)");
-        System.out.println("Caseta 3: " + size3 + " vehiculo(s)");
-        System.out.println("Caseta 4: " + size4 + " vehiculo(s)");
-        System.out.println("Pila deshacer: " + undoSize
-                + "  |  Historial: " + historySize);
+        System.out.println("Caseta 1: " + size1 + " vehiculo(s) en espera");
+        System.out.println("Caseta 2: " + size2 + " vehiculo(s) en espera");
+        System.out.println("Caseta 3: " + size3 + " vehiculo(s) en espera");
+        System.out.println("Caseta 4: " + size4 + " vehiculo(s) en espera");
+        System.out.println("Pila deshacer : " + undoSize);
+        System.out.println("Historial dia : " + historySize + " vehiculo(s) atendido(s)");
+    }
+
+    // =========================================================
+    // REPORTE 1 — Recaudo del dia
+    // =========================================================
+
+    /**
+     * Muestra el reporte de recaudo del dia actual.
+     * Recibe los datos ya calculados desde el Controller.
+     *
+     * @param day            numero de dia actual
+     * @param totalPorCaseta monto recaudado por caseta (indice 0 = caseta 1)
+     * @param vehicPorCaseta vehiculos atendidos por caseta
+     * @param totalPorCat    monto recaudado por categoria (indice 0 = cat 1)
+     * @param vehicPorCat    vehiculos por categoria
+     * @param totalDia       gran total del dia
+     */
+    public void showDayReport(int day,
+                              double[] totalPorCaseta, int[] vehicPorCaseta,
+                              double[] totalPorCat,    int[] vehicPorCat,
+                              double totalDia) {
+        System.out.println();
+        System.out.println("============================================");
+        System.out.println("     REPORTE DE RECAUDO  —  DIA " + day);
+        System.out.println("============================================");
+
+        System.out.println();
+        System.out.println("  Por caseta:");
+        for (int i = 0; i < totalPorCaseta.length; i++) {
+            System.out.println("    Caseta " + (i + 1)
+                    + " : " + vehicPorCaseta[i] + " vehiculo(s)"
+                    + "  |  $ " + (long) totalPorCaseta[i]);
+        }
+
+        System.out.println();
+        System.out.println("  Por categoria:");
+        String[] cat = {"Cat. I   (Livianos)        ",
+                        "Cat. II  (Buses/Microbuses)",
+                        "Cat. III (Camiones)        "};
+        for (int i = 0; i < totalPorCat.length; i++) {
+            System.out.println("    " + cat[i]
+                    + " : " + vehicPorCat[i] + " vehiculo(s)"
+                    + "  |  $ " + (long) totalPorCat[i]);
+        }
+
+        System.out.println();
+        System.out.println("============================================");
+        System.out.println("  TOTAL DEL DIA : $ " + (long) totalDia);
+        System.out.println("============================================");
+    }
+
+    // =========================================================
+    // REPORTE 3 — Historico semanal del supervisor
+    // =========================================================
+
+    /**
+     * Encabezado del reporte semanal.
+     *
+     * @param diasCerrados cantidad de dias cerrados hasta ahora
+     */
+    public void showWeeklyReportHeader(int diasCerrados) {
+        System.out.println();
+        System.out.println("############################################");
+        System.out.println("#     REPORTE SEMANAL — SUPERVISOR         #");
+        System.out.println("#     Dias cerrados: " + diasCerrados
+                + "                     #");
+        System.out.println("############################################");
+    }
+
+    /**
+     * Encabezado de caseta dentro del reporte semanal.
+     *
+     * @param boothNum numero de caseta
+     */
+    public void showBoothWeeklyHeader(int boothNum) {
+        System.out.println();
+        System.out.println("  ==========================================");
+        System.out.println("  CASETA " + boothNum);
+        System.out.println("  ==========================================");
+    }
+
+    /**
+     * Total semanal de una caseta.
+     *
+     * @param boothNum numero de caseta
+     * @param total    monto total de la semana
+     */
+    public void showBoothWeeklyTotal(int boothNum, double total) {
+        System.out.println("  ------------------------------------------");
+        System.out.println("  TOTAL SEMANA CASETA " + boothNum
+                + " : $ " + (long) total);
+    }
+
+    /**
+     * Gran total semanal de todas las casetas.
+     *
+     * @param total monto total de la semana
+     */
+    public void showWeeklyGrandTotal(double total) {
+        System.out.println();
+        System.out.println("############################################");
+        System.out.println("  TOTAL GENERAL SEMANA : $ " + (long) total);
+        System.out.println("############################################");
     }
 }
