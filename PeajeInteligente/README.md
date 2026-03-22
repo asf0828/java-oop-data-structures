@@ -1,10 +1,10 @@
-# PeajeInteligente - Sistema de Peaje Inteligente
+# PeajeInteligente — Intelligent Toll Booth System
 
-Sistema de gestion de peaje en Java con arquitectura MVC y estructuras de datos personalizadas. Administra cuatro casetas de cobro mediante colas FIFO, asignando cada vehiculo a la caseta con menos carga. Permite revertir la ultima atencion con una pila, consultar el historial por caseta con listas, y generar reportes diarios y semanales mediante registros diarios por caseta.
+Java MVC application with custom data structures that manages four toll booths using FIFO queues, automatically assigning each incoming vehicle to the booth with the shortest queue. Supports undo of the last attended vehicle via a stack, per-booth daily history via linked lists, and daily and weekly revenue reports via per-booth daily records.
 
 ## Exercise
 
-**Peaje Inteligente** - Registra vehiculos (placa, categoria, hora) de forma manual o automatica y los distribuye a la caseta con menos vehiculos en espera. La atencion desencola todos los vehiculos de la caseta seleccionada en orden FIFO, guardando cada uno en una pila de deshacer y en el historial de su caseta. Revertir extrae el ultimo vehiculo de la pila y lo elimina del historial. Al cerrar el dia se genera un arqueo de caja por caseta (DailyRecord) y el sistema queda vacio para el siguiente dia. Cada siete dias el supervisor consulta el historico semanal por caseta en orden LIFO (ultimo vehiculo primero), con total por dia y total general de la semana.
+**Peaje Inteligente** — Vehicles (plate, category, arrival time) are registered manually or in bulk and distributed to the shortest booth. Attending a booth dequeues all its vehicles in FIFO order, pushing each onto an undo stack and appending it to that booth's daily history list. Reverting pops the last vehicle from the undo stack and removes it from the corresponding history. Closing the day produces a per-booth cash reconciliation (`DailyRecord`) and resets all structures for the next day. After seven days the supervisor reviews the weekly report per booth in LIFO order (most recent vehicle first), with a per-day total and a weekly grand total.
 
 ## Class Diagram
 
@@ -147,25 +147,27 @@ PeajeInteligente/
 ├── src/
 │   └── peajeinteligente/
 │       ├── runner/
-│       │   └── Runner.java           # Punto de entrada
+│       │   └── Runner.java           # Entry point
 │       ├── controller/
-│       │   └── Controller.java       # Logica de negocio, menu y reportes
+│       │   └── Controller.java       # Business logic, menu dispatch, reports
 │       ├── view/
-│       │   └── IOManager.java        # Entrada/salida con BufferedReader
+│       │   └── IOManager.java        # I/O via BufferedReader
 │       └── model/
-│           ├── Vehicle.java          # Dominio: placa, categoria, peaje, timestamp
-│           ├── DailyRecord.java      # Registro diario por caseta con pila LIFO
-│           ├── Node.java             # Nodo generico enlazado
-│           ├── Queue.java            # Cola FIFO enlazada con contador de tamano
-│           ├── Stack.java            # Pila LIFO enlazada con contador de tamano
-│           └── List.java             # Lista enlazada simple con acceso por indice
+│           ├── Vehicle.java          # Domain: plate, category, toll, timestamp
+│           ├── DailyRecord.java      # Per-booth daily record with LIFO vehicle stack
+│           ├── Node.java             # Generic linked node
+│           ├── Queue.java            # FIFO linked queue with size counter
+│           ├── Stack.java            # LIFO linked stack with size counter
+│           └── List.java             # Singly linked list with index access
 ├── bin/
 └── README.md
 ```
 
-## Posibles mejoras
+## Possible improvements
 
-Una mejora natural sería encapsular cada caseta en una clase `Caseta` que agrupe internamente su cola de vehiculos en espera (`Queue<Vehicle>`), su historial diario (`List<Vehicle>`) y su pila de deshacer (`Stack<Vehicle>`). Con ese diseño, revertir operaria sobre la caseta específica y no sobre una pila global compartida entre todas, lo que refleja mejor la realidad: el error de registro ocurre en una caseta concreta. El `Controller` pasaría de manejar ocho estructuras separadas a mantener cuatro objetos `Caseta`, simplificando `atender()`, `revertir()`, `reporteRecaudoDia()` y `cerrarDia()`.
+A natural improvement would be to encapsulate each toll booth in a `Booth` class that internally groups its waiting queue (`Queue<Vehicle>`), its daily history (`List<Vehicle>`), and its undo stack (`Stack<Vehicle>`). With that design, reverting would operate on the specific booth rather than a shared global stack, which better reflects reality: a registration error happens at a particular booth. The `Controller` would go from managing eight separate structures to holding four `Booth` objects, simplifying `atender()`, `revertir()`, `reporteRecaudoDia()`, and `cerrarDia()`.
+
+A second improvement relates to `IOManager.showDayReport()`, which currently receives thirteen individual parameters. Wrapping those values in a `DayReport` data class would make the method signature readable and easy to extend (e.g., adding per-category averages later) without touching the Controller or the IOManager signature again.
 
 ## How to Run
 
