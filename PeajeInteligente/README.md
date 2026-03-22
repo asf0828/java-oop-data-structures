@@ -172,9 +172,12 @@ A second improvement relates to `IOManager.showDayReport()`, which currently rec
 ## How to Run
 
 ```bash
-cd PeajeInteligente
+# Navigate to the project directory
+cd /path/to/PeajeInteligente
 
+# Compile the project
 ~/.sdkman/candidates/java/current/bin/javac -d bin $(find src -name "*.java")
 
+# Run the project
 ~/.sdkman/candidates/java/current/bin/java -cp bin peajeinteligente.runner.Runner
 ```

@@ -308,6 +308,11 @@ public class Controller {
     // OPERACIONES BASICAS
     // =========================================================
 
+    /**
+     * Lee los datos del vehiculo manualmente y lo encola en la caseta mas corta.
+     *
+     * @throws IOException si ocurre un error de lectura
+     */
     private void registrar() throws IOException {
         String plate     = io.getString("Placa: ");
         int category     = io.getInt("Categoria (1-3): ");
@@ -318,6 +323,13 @@ public class Controller {
         io.showMessage("Vehiculo registrado: " + vehicle);
     }
 
+    /**
+     * Genera N vehiculos con placa y categoria aleatorias y los distribuye
+     * automaticamente entre las casetas. Los timestamps se espacian 500 segundos
+     * entre si, de modo que 200 vehiculos cubren aproximadamente un dia completo.
+     *
+     * @throws IOException si ocurre un error de lectura
+     */
     private void registrarAleatorio() throws IOException {
         int n = io.getInt("Ingrese la cantidad de vehiculos: ");
         LocalTime tiempo = LocalTime.now();
@@ -329,6 +341,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Muestra el estado actual: vehiculos en espera por caseta,
+     * operaciones en la pila de deshacer y total de vehiculos atendidos hoy.
+     */
     private void mostrarEstado() {
         int histTotal = histCaseta1.getSize() + histCaseta2.getSize()
                       + histCaseta3.getSize() + histCaseta4.getSize();
@@ -365,6 +381,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Revierte la ultima atencion: desapila el vehiculo de undoStack,
+     * desapila el numero de caseta de undoBooth y elimina el ultimo
+     * elemento del historial correspondiente.
+     */
     private void revertir() {
         if (undoStack.isEmpty()) {
             io.showMessage("No hay operaciones para revertir.");
@@ -387,6 +408,12 @@ public class Controller {
         mostrarListaCaseta(4, histCaseta4);
     }
 
+    /**
+     * Imprime los vehiculos del historial de una caseta si no esta vacio.
+     *
+     * @param num  numero de caseta
+     * @param hist historial diario de esa caseta
+     */
     private void mostrarListaCaseta(int num, List<Vehicle> hist) {
         if (hist.getSize() == 0) return;
         io.showMessage("  -- Caseta " + num + " --");
@@ -417,6 +444,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Retorna el historial diario de la caseta indicada.
+     *
+     * @param number numero de caseta (1-4)
+     * @return historial de esa caseta, o {@code null} si el numero es invalido
+     */
     private List<Vehicle> histByNumber(int number) {
         switch (number) {
             case 1: return histCaseta1;
@@ -427,6 +460,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Genera un vehiculo aleatorio con placa en formato LLL000 y categoria 1, 2 o 3.
+     *
+     * @param timestamp hora de ingreso ya formateada en HH:mm:ss
+     * @return vehiculo generado
+     */
     private Vehicle generarVehiculo(String timestamp) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 3; i++) sb.append((char)('A' + random.nextInt(26)));

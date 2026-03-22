@@ -35,11 +35,23 @@ public class Vehicle {
         this.timestamp = timestamp;
     }
 
+    /** @return placa del vehiculo */
     public String getPlate()     { return plate; }
+
+    /** @return categoria del vehiculo (1, 2 o 3) */
     public int    getCategory()  { return category; }
+
+    /** @return valor del peaje cobrado */
     public double getToll()      { return toll; }
+
+    /** @return hora de ingreso en formato HH:mm:ss */
     public String getTimestamp() { return timestamp; }
 
+    /**
+     * Representacion textual del vehiculo con placa, categoria, peaje y timestamp.
+     *
+     * @return cadena con los datos del vehiculo
+     */
     @Override
     public String toString() {
         return plate + " Cat:" + category + " $" + (int) toll + " [" + timestamp + "]";

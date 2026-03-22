@@ -18,6 +18,12 @@ public class IOManager {
     // MENUS
     // =========================================================
 
+    /**
+     * Muestra el menu principal y retorna la opcion seleccionada.
+     *
+     * @return opcion ingresada por el usuario
+     * @throws IOException si ocurre un error de lectura
+     */
     public int showMenu() throws IOException {
         System.out.println();
         System.out.println("=== Peaje Inteligente ===");
@@ -33,6 +39,13 @@ public class IOManager {
         return Integer.parseInt(reader.readLine().trim());
     }
 
+    /**
+     * Muestra el submenu de reportes con el dia actual e retorna la opcion.
+     *
+     * @param currentDay numero del dia actual dentro de la semana
+     * @return opcion ingresada por el usuario
+     * @throws IOException si ocurre un error de lectura
+     */
     public int showReportMenu(int currentDay) throws IOException {
         System.out.println();
         System.out.println("=== Reportes  [Dia actual: " + currentDay + "] ===");
@@ -48,11 +61,25 @@ public class IOManager {
     // ENTRADA
     // =========================================================
 
+    /**
+     * Muestra un mensaje y lee una linea de texto.
+     *
+     * @param prompt texto que se muestra antes de leer
+     * @return cadena ingresada por el usuario
+     * @throws IOException si ocurre un error de lectura
+     */
     public String getString(String prompt) throws IOException {
         System.out.print(prompt);
         return reader.readLine().trim();
     }
 
+    /**
+     * Muestra un mensaje y lee un numero entero.
+     *
+     * @param prompt texto que se muestra antes de leer
+     * @return entero ingresado por el usuario
+     * @throws IOException si ocurre un error de lectura
+     */
     public int getInt(String prompt) throws IOException {
         System.out.print(prompt);
         return Integer.parseInt(reader.readLine().trim());
@@ -62,10 +89,26 @@ public class IOManager {
     // SALIDA GENERAL
     // =========================================================
 
+    /**
+     * Imprime un mensaje en la consola.
+     *
+     * @param message mensaje a mostrar
+     */
     public void showMessage(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Muestra el estado actual de las cuatro casetas, la pila de deshacer
+     * y el total de vehiculos atendidos en el dia.
+     *
+     * @param size1       vehiculos en espera en caseta 1
+     * @param size2       vehiculos en espera en caseta 2
+     * @param size3       vehiculos en espera en caseta 3
+     * @param size4       vehiculos en espera en caseta 4
+     * @param undoSize    operaciones disponibles para revertir
+     * @param historySize vehiculos atendidos en el dia actual
+     */
     public void showState(int size1, int size2, int size3, int size4,
                           int undoSize, int historySize) {
         System.out.println();
@@ -83,6 +126,26 @@ public class IOManager {
     // Paso 7: firma con variables individuales, sin arrays
     // =========================================================
 
+    /**
+     * Muestra el reporte de recaudo del dia con totales por caseta y por categoria.
+     *
+     * @param day          numero del dia
+     * @param totalCaseta1 recaudo de caseta 1
+     * @param vehicCaseta1 vehiculos atendidos en caseta 1
+     * @param totalCaseta2 recaudo de caseta 2
+     * @param vehicCaseta2 vehiculos atendidos en caseta 2
+     * @param totalCaseta3 recaudo de caseta 3
+     * @param vehicCaseta3 vehiculos atendidos en caseta 3
+     * @param totalCaseta4 recaudo de caseta 4
+     * @param vehicCaseta4 vehiculos atendidos en caseta 4
+     * @param totalCat1    recaudo categoria 1
+     * @param vehicCat1    vehiculos categoria 1
+     * @param totalCat2    recaudo categoria 2
+     * @param vehicCat2    vehiculos categoria 2
+     * @param totalCat3    recaudo categoria 3
+     * @param vehicCat3    vehiculos categoria 3
+     * @param totalDia     total general del dia
+     */
     public void showDayReport(int day,
                               double totalCaseta1, int vehicCaseta1,
                               double totalCaseta2, int vehicCaseta2,
@@ -117,6 +180,11 @@ public class IOManager {
     // REPORTE 3 — Historico semanal del supervisor
     // =========================================================
 
+    /**
+     * Muestra el encabezado del reporte semanal del supervisor.
+     *
+     * @param diasCerrados cantidad de dias cerrados en la semana actual
+     */
     public void showWeeklyReportHeader(int diasCerrados) {
         System.out.println();
         System.out.println("############################################");
@@ -141,11 +209,22 @@ public class IOManager {
         System.out.println("  ==========================================");
     }
 
+    /**
+     * Muestra el total recaudado por una caseta en un dia del reporte semanal.
+     *
+     * @param boothNum numero de caseta
+     * @param total    total recaudado
+     */
     public void showBoothWeeklyTotal(int boothNum, double total) {
         System.out.println("  ------------------------------------------");
         System.out.println("  Total caseta " + boothNum + " : $ " + (long) total);
     }
 
+    /**
+     * Muestra el total general de recaudo de la semana.
+     *
+     * @param total total recaudado en la semana
+     */
     public void showWeeklyGrandTotal(double total) {
         System.out.println();
         System.out.println("############################################");
