@@ -2,8 +2,8 @@ package peajeinteligente.model;
 
 /**
  * Lista enlazada simple generica.
- * Permite agregar elementos al final y mostrarlos por consola.
- * Mantiene un contador de tamano para consulta sin recorrido.
+ * Permite agregar elementos al final y recorrerlos por indice.
+ * Mantiene un contador de tamano para consulta sin recorrido destructivo.
  *
  * @param <T> tipo del elemento almacenado
  */
@@ -35,14 +35,20 @@ public class List<T> {
     }
 
     /**
-     * Muestra todos los elementos de la lista por consola.
+     * Retorna el elemento en la posicion indicada (base 0).
+     * Permite al Controller recorrer la lista sin destruirla
+     * y sin delegar impresion al modelo.
+     *
+     * @param index posicion del elemento
+     * @return elemento en esa posicion, o {@code null} si el indice es invalido
      */
-    public void show() {
+    public T get(int index) {
+        if (index < 0 || index >= size) return null;
         Node<T> aux = head;
-        while (aux != null) {
-            System.out.println(aux.getData());
+        for (int i = 0; i < index; i++) {
             aux = aux.getNext();
         }
+        return aux.getData();
     }
 
     /**
