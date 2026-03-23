@@ -122,22 +122,23 @@ classDiagram
         +setNext(Node next)
     }
 
-    Runner --> Controller
-    Runner --> IOManager
-    Controller --> IOManager
-    Controller --> Queue
-    Controller --> Stack
-    Controller --> List
-    Controller --> DailyRecord
-    DailyRecord --> Stack
-    DailyRecord --> Vehicle
-    Queue --> Node
-    Stack --> Node
-    List --> Node
-    Queue --> Vehicle
-    Stack --> Vehicle
-    List --> Vehicle
-    List --> DailyRecord
+    Runner "1" --> "1" Controller
+    Runner "1" --> "1" IOManager
+    Controller "1" --> "1" IOManager
+    Controller "1" --> "4" Queue : booths
+    Controller "1" --> "2" Stack : undoStack / undoBooth
+    Controller "1" --> "4" List : histCaseta
+    Controller "1" --> "1" List : week
+    Controller "1" --> "0..*" DailyRecord
+    DailyRecord "1" --> "1" Stack : vehicles
+    DailyRecord "1" --> "0..*" Vehicle
+    Queue "1" *-- "0..*" Node
+    Stack "1" *-- "0..*" Node
+    List "1" *-- "0..*" Node
+    Queue "1" --> "0..*" Vehicle
+    Stack "1" --> "0..*" Vehicle
+    List "1" --> "0..*" Vehicle
+    List "1" --> "0..*" DailyRecord
 ```
 
 ## Structure
@@ -162,6 +163,10 @@ PeajeInteligente/
 ├── bin/
 └── README.md
 ```
+
+## Note on undo behavior
+
+Reverting an attended vehicle removes it from the daily history as if it never paid. This is intentional: in a real toll booth, once a vehicle crosses, it cannot return to be re-charged, so the only valid correction is to void the transaction entirely and handle it through an external process (e.g., a manual adjustment). The undo operation is therefore designed as an operator error correction tool, not as a true financial reversal.
 
 ## Possible improvements
 
